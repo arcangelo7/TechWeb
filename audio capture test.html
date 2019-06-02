@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>WHERE-M-I TEST</title>
+    <meta name="viewport" content="width=device-width">
+    
+</head>
+<body>
+    <header>
+        <h1>WHERE-M-I, TEST REGISTRAZIONE CLIP AUDIO</h1>
+    </header>
+    <main>
+        
+        <p><button id="btnStart">START RECORDING</button><br/>
+        <button id="btnStop">STOP RECORDING</button></p>
+        
+        <audio controls></audio>
+        
+        <audio id="aud2" controls></audio>
+        
+    </main>    
+    <script>
+        
+        let constraintObj = { 
+            audio: true, 
+            video: false
+        }; 
+        
+        //handle older browsers that might implement getUserMedia in some way
+        if (navigator.mediaDevices === undefined) {
+            navigator.mediaDevices = {};
+            navigator.mediaDevices.getUserMedia = function(constraintObj) {
+                let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraintObj, resolve, reject);
+                });
+            }
+        }else{
+            navigator.mediaDevices.enumerateDevices()
+            .then(devices => {
+                devices.forEach(device=>{
+                    console.log(device.kind.toUpperCase(), device.label);
+                    //, device.deviceId
+                })
+            })
+            .catch(err=>{
+                console.log(err.name, err.message);
+            })
+        }
+        navigator.mediaDevices.getUserMedia(constraintObj)
+        .then(function(mediaStreamObj) {
+            //connect the media stream to the first audio element
+            let audio = document.querySelector('audio');
+            if ("srcObject" in audio) {
+                audio.srcObject = mediaStreamObj;
+            } else {
+                //old version
+                audio.src = window.URL.createObjectURL(mediaStreamObj);
+            }
+            
+            audio.onloadedmetadata = function(ev) {
+                //show in the audio element what is being captured by the microphone
+                audio.play();
+            };
+            
+            //add listeners for saving video/audio
+            let start = document.getElementById('btnStart');
+            let stop = document.getElementById('btnStop');
+            let audSave = document.getElementById('aud2');
+            let mediaRecorder = new MediaRecorder(mediaStreamObj);
+            let chunks = [];
+            
+            start.addEventListener('click', (ev)=>{
+                mediaRecorder.start();
+                console.log(mediaRecorder.state);
+            })
+            stop.addEventListener('click', (ev)=>{
+                mediaRecorder.stop();
+                console.log(mediaRecorder.state);
+            });
+            mediaRecorder.ondataavailable = function(ev) {
+                chunks.push(ev.data);
+            }
+            mediaRecorder.onstop = (ev)=>{
+                let blob = new Blob(chunks, { 'type' : 'audio/ogg;' });
+                chunks = [];
+                //var audioURL = URL.createObjectURL(blob);
+                let audioURL = window.URL.createObjectURL(blob);
+                audSave.src = audioURL;
+            }
+        })
+        .catch(function(err) { 
+            console.log(err.name, err.message); 
+        });
+        
+    </script>
+</body>
+</html>
