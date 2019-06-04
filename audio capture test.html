@@ -14,12 +14,19 @@
     <main>
         
         <p><button id="btnStart">START RECORDING</button><br/>
-        <button id="btnStop">STOP RECORDING</button></p>
+        <div></div>
+        <button id="btnStop" disabled>STOP RECORDING</button></p>
+        <div></div>
+        <p id="p1">AUDIO FEEDBACK:</p>
+        <audio controls id="aud1"></audio>
+        <div></div>
+        <p id="p3">Clicca "START RECORDING" per avviare la registrazione della clip. Consigliamo di regolare il volume del feedback audio prima di iniziare, in quanto non è possibile durante la registrazione.</p>
+        <div></div>
+        <p id="p2"></p>
+        <audio controls id="aud2" hidden></audio>
         
-        <audio controls></audio>
         
-        <audio id="aud2" controls></audio>
-        
+
     </main>    
     <script>
         
@@ -76,18 +83,34 @@
             let chunks = [];
             
             start.addEventListener('click', (ev)=>{
+                start.disabled=true;
+                stop.disabled=false;
                 mediaRecorder.start();
                 console.log(mediaRecorder.state);
+                document.getElementById("aud1").load();
+                document.getElementById("aud1").controls=false;
+                document.getElementById("aud2").hidden=true;
+                document.getElementById("p1").hidden=true;
+                document.getElementById("p2").innerHTML = "";
+                document.getElementById("p3").innerHTML = "REGISTRAZIONE IN CORSO!";
             })
             stop.addEventListener('click', (ev)=>{
+                start.disabled=false;
+                stop.disabled=true;
                 mediaRecorder.stop();
                 console.log(mediaRecorder.state);
+                document.getElementById("aud1").pause();
+                document.getElementById("aud1").controls=true;
+                document.getElementById("aud2").hidden=false;
+                document.getElementById("p1").hidden=false;
+                document.getElementById("p2").innerHTML = "Clicca play per riascoltare la clip:";
+                document.getElementById("p3").innerHTML = "Registrazione conclusa.";
             });
             mediaRecorder.ondataavailable = function(ev) {
                 chunks.push(ev.data);
             }
             mediaRecorder.onstop = (ev)=>{
-                let blob = new Blob(chunks, { 'type' : 'audio/ogg;' });
+                let blob = new Blob(chunks, { 'type' : 'audio/mp3;' });
                 chunks = [];
                 //var audioURL = URL.createObjectURL(blob);
                 let audioURL = window.URL.createObjectURL(blob);
