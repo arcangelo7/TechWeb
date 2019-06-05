@@ -6,51 +6,48 @@
 		<title>WHERE-M-I</title>
 	</head>
 	<body>
-		<input type="text" id="ingeo" value=""><br> <!-- da sostituire con un input migliore -->
+		<input type="text" id="ingeo" value=""> <!-- da sostituire con un input migliore -->
+		:
 		<span id="purpose">
 			<select id="inpur" v-model="selected">
 				<option v-for="puropt in puropts" v-bind:value="puropt">
 					{{ puropt }}
 				</option>
 			</select>
-			<span>Selected: {{ selected }}</span>
 		</span>
-		<br>
+		:
 		<span id="language">
 			<select id="inlan" v-model="selected">
 				<option v-for="lanopt in lanopts" v-bind:value="lanopt">
 					{{ lanopt }}
 				</option>
 			</select>
-			<span>Selected: {{ selected }}</span>
 		</span>
-		<br>
+		:
 		<span id="content">
 			<select id="incon" v-model="selected">
 				<option v-for="conopt in conopts" v-bind:value="conopt">
 					{{ conopt }}
 				</option>
 			</select>
-			<span>Selected: {{ selected }}</span>
 		</span>
-		<br>
+		:
 		<span id="audience">
 			<select id="inaud" v-model="selected">
 				<option v-for="audopt in audopts" v-bind:value="audopt">
 					{{ audopt }}
 				</option>
 			</select>
-			<span>Selected: {{ selected }}</span>
 		</span>
-		<br>
+		:
 		<span id="detail">
 			<select id="indet" v-model="selected">
 				<option v-for="detopt in detopts" v-bind:value="detopt">
 					{{ detopt }}
 				</option>
 			</select>
-			<span>Selected: {{ selected }}</span>
 		</span>
+		<br><br><br>
 		<div id="str">
 			<button v-on:click="insert()">Invia i metadati</button>
 			<button v-on:click="translate()">Traduci i metadati</button>
