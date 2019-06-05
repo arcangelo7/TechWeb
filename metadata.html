@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<meta charset="UTF-8">
+		<title>WHERE-M-I</title>
+	</head>
+	<body>
+		<input type="text" id="ingeo" value=""><br> <!-- da sostituire con un input migliore -->
+		<span id="purpose">
+			<select id="inpur" v-model="selected">
+				<option v-for="puropt in puropts" v-bind:value="puropt">
+					{{ puropt }}
+				</option>
+			</select>
+			<span>Selected: {{ selected }}</span>
+		</span>
+		<br>
+		<span id="language">
+			<select id="inlan" v-model="selected">
+				<option v-for="lanopt in lanopts" v-bind:value="lanopt">
+					{{ lanopt }}
+				</option>
+			</select>
+			<span>Selected: {{ selected }}</span>
+		</span>
+		<br>
+		<span id="content">
+			<select id="incon" v-model="selected">
+				<option v-for="conopt in conopts" v-bind:value="conopt">
+					{{ conopt }}
+				</option>
+			</select>
+			<span>Selected: {{ selected }}</span>
+		</span>
+		<br>
+		<span id="audience">
+			<select id="inaud" v-model="selected">
+				<option v-for="audopt in audopts" v-bind:value="audopt">
+					{{ audopt }}
+				</option>
+			</select>
+			<span>Selected: {{ selected }}</span>
+		</span>
+		<br>
+		<span id="detail">
+			<select id="indet" v-model="selected">
+				<option v-for="detopt in detopts" v-bind:value="detopt">
+					{{ detopt }}
+				</option>
+			</select>
+			<span>Selected: {{ selected }}</span>
+		</span>
+		<div id="str">
+			<button v-on:click="insert()">Invia i metadati</button>
+			<button v-on:click="translate()">Traduci i metadati</button>
+			<br><br>
+			{{ testo }}
+		</div>
+	</body>
+	<script>
+		var purp = ['what','how','why']
+		var lansig = ['ita','eng','deu','fra','esp']
+		var lannome = ['italiano','inglese','tedesco','francese','spagnolo']
+		var consig = ['none','nat','art','his','flk','mod','rel','cui','spo','mus','mov','fas','shp','tec','pop','prs','oth']
+		var connome =['nessuna','natura','arte','storia','folklore','cultura moderna','religione','cucina e drink','sport','musica','film','moda','shopping','tecnologia','cult. pop. e gossip','esperienze personali','altro']
+		var audsig = ['gen','pre','elm','mid','scl']
+		var audnome = ['pubblico generico','pre-scuola','scuola primaria','scuola media','specialisti del settore']
+		var detnum = ['1','2','3'] //discutere sulle incomprensioni delle slide
+		var detdef = ['leggero','medio','approfondito']
+		new Vue({
+			el: '#purpose',
+			data: 
+			{
+				selected: purp[0],
+				puropts: purp
+			}
+		})
+		new Vue({
+			el: '#language',
+			data: 
+			{
+				selected: lansig[0],
+				lanopts: lansig
+			}
+		})
+		new Vue({
+			el: '#content',
+			data: 
+			{
+				selected: consig[0],
+				conopts: consig
+			}
+		})
+		new Vue({
+			el: '#audience',
+			data: {
+				selected: audsig[0],
+				audopts: audsig
+			}
+		})
+		new Vue({
+			el: '#detail',
+			data: {
+				selected: detnum[0],
+				detopts: detnum
+			}
+		})
+		new Vue({
+			el: '#str',
+			data: {
+				testo: ''
+			},
+			methods: {
+				insert : function(){
+					var geo = document.getElementById("ingeo").value;
+					var pur = document.getElementById("inpur").value;
+					var lan = document.getElementById("inlan").value;
+					var con = document.getElementById("incon").value;
+					var aud = document.getElementById("inaud").value;
+					var det = document.getElementById("indet").value;
+					this.testo = geo + ":" + pur + ":" + lan + ":" + con + ":" + aud + ":" + det;
+				},
+				translate : function(){
+					if(this.testo == '')
+					{
+						alert("Errore stringa vuota")
+					}
+					else
+					{
+						arrdati = this.testo.split(":");
+						var pur = purp.indexOf(arrdati[1])
+						var lan = lansig.indexOf(arrdati[2])
+						var con = consig.indexOf(arrdati[3])
+						var aud = audsig.indexOf(arrdati[4])
+						var det = detnum.indexOf(arrdati[5])
+						alert("Geoloc: " + arrdati[0] + "\nPurpose: " + purp[pur] + "\nLanguage: " + lansig[lan]  + " (" + lannome[lan] + ")\nContent:" + consig[con] + " (" + connome[con] + ")\nAudience: " + audsig[aud] + " (" + audnome[lan] + ")\nDettagli: " + detnum[det] + " (" + detdef[det] + ")")
+					}
+				}
+			}
+		})
+	</script>
+</html>
