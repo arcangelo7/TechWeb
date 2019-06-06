@@ -1,0 +1,12 @@
+/*To show a full-screen map*/
+#mappa { height: calc(100vh - 56px); }
+
+/*To show microphone's button without the appearance of a button*/
+#bottone-registratore { 
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+}
