@@ -21,7 +21,7 @@ function onLocationFound(e) {
     var radius = e.accuracy / 2;
 
     L.marker(e.latlng).addTo(map)
-        .bindPopup("<div class='text-center'><h3>Tu sei qui <a type='button' id='bottone-registratore' class='blinking'><i class='fas fa-microphone'></i></a></h3><p class='lead'>Clicca sul microfono per creare una clip</p></div>").openPopup();
+        .bindPopup("<div class='text-center'><h3>Tu sei qui <a type='button' id='bottone-registratore'><i class='fas fa-microphone'></i></a></h3><p class='lead'>Clicca sul microfono per creare una clip</p></div>").openPopup();
 
     L.circle(e.latlng, radius).addTo(map);
 

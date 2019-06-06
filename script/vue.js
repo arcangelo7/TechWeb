@@ -1,93 +1,103 @@
-Vue.component("mappa", {
-    template: `
-        <div id="mappa"></div>
-    `
-});
-
-Vue.component("new-clip-form", {
-    template: `
-    <div id="new-clip-form-modal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Nuova clip</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="nuovaClip">
-                        <div class="form-group row">
-                            <label for="titolo" class="col-sm-2 col-form-label">Titolo</label>
-                            <div class="col-sm-10">
-                                <input type="texts" class="form-control" id="titolo" placeholder="Piazza Maggiore">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="testo" class="col-sm-2 col-form-label">Testo</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" id="testo" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="check-scopo" class="col-sm-2 col-form-label">Scopo</label>
-                            <div id="check-scopo" class="col-sm-10">
-                                <div class="form-check form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="scopo" id="what" value="what" checked>
-                                    <label class="form-check-label" for="what">
-                                        What
-                                    </label>
-                                </div>
-                                <div class="form-check form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="scopo" id="how" value="how">
-                                    <label class="form-check-label" for="how">
-                                        How
-                                    </label>
-                                </div>
-                                <div class="form-check form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="scopo" id="why" value="why">
-                                    <label class="form-check-label" for="why">
-                                        Why
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="categoria" class="col-sm-2 col-form-label">Categoria</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="categoria">
-                                    <option>Nessuna</option>
-                                    <option>Natura</option>
-                                    <option>Arte</option>
-                                    <option>Storia</option>
-                                    <option>Folklore</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="pubblico" class="col-sm-2 col-form-label">Pubblico</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="pubblico">
-                                    <option>Pubblico generico</option>
-                                    <option>Pre-scuola</option>
-                                    <option>Scuola primaria</option>
-                                    <option>Scuola media</option>
-                                    <option>Specialisti del settore</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>    
-    `
-});
-
-var app = new Vue({
-    el: "#app"
-});
+var purpose_array = ['what','how','why']
+        var language_sigla = ['ita','eng','deu','fra','esp']
+        var language_nome = ['italiano','inglese','tedesco','francese','spagnolo']
+        var content_sigla = ['none','nat','art','his','flk','mod','rel','cui','spo','mus','mov','fas','shp','tec','pop','prs','oth']
+        var content_nome =['nessuna','natura','arte','storia','folklore','cultura moderna','religione','cucina e drink','sport','musica','film','moda','shopping','tecnologia','cult. pop. e gossip','esperienze personali','altro']
+        var audience_sigla = ['gen','pre','elm','mid','scl']
+        var audience_nome = ['pubblico generico','pre-scuola','scuola primaria','scuola media','specialisti del settore']
+        var detail_numero = ['1','2','3']
+        var detail_significato = ['leggero','medio','approfondito']
+        Vue.component('componentpurpose', {
+            props: ['nome'],
+            template:   `<div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="scopo" :value=nome v-model="picked">
+                            <label class="form-check-label" for=opzione_purpose>
+                                {{ nome }}
+                            </label>
+                        </div>`,
+            data: function() {
+            return {
+                picked: purpose_array[0]
+                }
+            },
+            watch: {
+                picked: function() {
+                this.$emit('input', this.picked);
+                }
+            }
+        })
+        Vue.component('componentlanguage', {
+            props: ['language_opzioni'],
+        })
+        Vue.component('componentcontent', {
+            props: ['content_opzioni'],
+        })
+        Vue.component('componentaudience', {
+            props: ['audience_opzioni'],
+        })
+        Vue.component('detailaudience', {
+            props: ['detail_opzioni'],
+        })
+        new Vue({
+            el: '#metadati',
+            data() {
+                return {
+                    visualizza: true,
+                    purpose_opzioni: purpose_array,
+                    purpose_picked: purpose_array[0],
+                    language_opzioni: language_nome,
+                    language_selected: language_nome[0],
+                    content_opzioni: content_nome,
+                    content_selected: content_nome[0],
+                    audience_opzioni: audience_nome,
+                    audience_selected: audience_nome[0],
+                    detail_opzioni: detail_significato,
+                    detail_selected: detail_significato[0],
+                    titolo: '',
+                    testo: '',
+                    stringa_metadati: '',
+                }
+            },
+            methods: {
+                insert : function(){
+                    var tit = document.getElementById("titolo").value;
+                    var text = document.getElementById("testo").value;
+                    if(tit == '')
+                    {
+                        alert("Errore titolo vuoto")
+                    }
+                    else if(text == '')
+                    {
+                        alert("Errore testo vuoto")
+                    }
+                    else
+                    {
+                        this.titolo = tit
+                        this.testo = text
+                        var geo = "8FPHF8VV+57"; //coordinate di esempio(da tenere fino a quando non otteniamo quelle vere)
+                        var pur = this.purpose_picked;
+                        var ilan = language_nome.indexOf(this.language_selected);
+                        var icon = content_nome.indexOf(this.content_selected);
+                        var iaud = audience_nome.indexOf(this.audience_selected);
+                        var idet = detail_significato.indexOf(this.detail_selected)
+                        this.stringa_metadati = geo + ":" + pur + ":" + language_sigla[ilan] + ":" + content_sigla[icon] + ":A" + audience_sigla[iaud] + ":P" + detail_numero[idet];
+                    }
+                },
+                translate : function(){
+                    if(this.stringa_metadati == '')
+                    {
+                        alert("Errore nessuna clip inserita")
+                    }
+                    else
+                    {
+                        array_dati = this.stringa_metadati.split(":");
+                        var ipur = purpose_array.indexOf(array_dati[1])
+                        var ilan = language_sigla.indexOf(array_dati[2])
+                        var icon = content_sigla.indexOf(array_dati[3])
+                        var iaud = audience_sigla.indexOf(array_dati[4].split("A").pop())
+                        var idet = detail_numero.indexOf(array_dati[5].split("P").pop())
+                        alert("Titolo: " + this.titolo + "\nTesto: " + this.testo + "\nGeoloc: " + array_dati[0] + "\nPurpose: " + purpose_array[ipur] + "\nLanguage: " + language_sigla[ilan]  + " (" + language_nome[ilan] + ")\nContent: " + content_sigla[icon] + " (" + content_nome[icon] + ")\nAudience: " + audience_sigla[iaud] + " (" + audience_nome[ilan] + ")\nDettagli: " + detail_numero[idet] + " (" + detail_significato[idet] + ")")
+                    }
+                }
+            }
+        })
