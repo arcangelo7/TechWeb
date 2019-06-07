@@ -20,7 +20,7 @@ function onLocationFound(e) {
 
     var radius = e.accuracy / 2;
 
-    let popupContent = `<div class='text-center'>
+    var popupContent = `<div class='text-center'>
                             <h3>Tu sei qui <a type='button'></a><i id='microfono' class='fas fa-microphone'></i></h3>
                             <p class='lead'>Clicca per creare una clip</p>
                             <button id='registratore' class='btn btn-primary'>Crea</button>
@@ -28,9 +28,15 @@ function onLocationFound(e) {
                             <button id='stop' class='btn btn-primary'>Stop</button>
                             <audio class='mt-4' controls id='audio' hidden></audio>
                         </div>`
-
+    // Il popup non si chiude mai
+    var customOptions = {
+        closeButton: false,
+        autoClose: false,
+        closeOnEscapeKey: false,
+        closeOnClick: false
+    }
     L.marker(e.latlng).addTo(map)
-        .bindPopup(popupContent).openPopup();
+        .bindPopup(popupContent, customOptions).openPopup();
 
     L.circle(e.latlng, radius).addTo(map);
 
