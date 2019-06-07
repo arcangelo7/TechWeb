@@ -26,7 +26,7 @@ function onLocationFound(e) {
                             <button id='registratore' class='btn btn-primary'>Crea</button>
                             <button id='registratore-no-autorizzazione' class='btn btn-primary'>Crea</button>
                             <button id='stop' class='btn btn-primary'>Stop</button>
-                            <audio class='mt-4' controls id='aud2' hidden></audio>
+                            <audio class='mt-4' controls id='audio' hidden></audio>
                         </div>`
 
     L.marker(e.latlng).addTo(map)

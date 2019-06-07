@@ -40,24 +40,24 @@ map.on('popupopen', function() {
             
                 //add listeners for saving video/audio
                 let stop = document.getElementById('stop');
-                let audSave = document.getElementById('aud2');
+                let audSave = document.getElementById('audio');
                 let mediaRecorder = new MediaRecorder(mediaStreamObj);
                 let chunks = [];
 
                 mediaRecorder.start();
                 console.log(mediaRecorder.state);
-                document.getElementById("aud2").hidden=true;
+                document.getElementById("audio").hidden=true;
                 
                 start.addEventListener('click', (ev)=>{
                     mediaRecorder.start();
                     console.log(mediaRecorder.state);
-                    document.getElementById("aud2").hidden=true;
+                    document.getElementById("audio").hidden=true;
                 });
 
                 stop.addEventListener('click', (ev)=>{
                     mediaRecorder.stop();
                     console.log(mediaRecorder.state);
-                    document.getElementById("aud2").hidden=false;
+                    document.getElementById("audio").hidden=false;
                 });
                 mediaRecorder.ondataavailable = function(ev) {
                     chunks.push(ev.data);
