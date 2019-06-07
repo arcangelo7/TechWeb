@@ -21,7 +21,7 @@ function onLocationFound(e) {
     var radius = e.accuracy / 2;
 
     L.marker(e.latlng).addTo(map)
-        .bindPopup("<div class='text-center'><h3>Tu sei qui <a type='button' id='bottone-registratore'><i class='fas fa-microphone'></i></a></h3><p class='lead'>Clicca sul microfono per creare una clip</p></div>").openPopup();
+        .bindPopup("<div class='text-center'><h3>Tu sei qui <a type='button' id='bottone-registratore'><i class='fas fa-microphone'></i></a></h3><p class='lead'>Clicca sul microfono per creare una clip</p><button id='stop' class='btn btn-primary'>Stop</button><audio class='mt-4' controls id='aud2' hidden></audio></div>").openPopup();
 
     L.circle(e.latlng, radius).addTo(map);
 
@@ -42,6 +42,7 @@ map.on('locationerror', onLocationError);
 // Comportamento del bottone per registrare
 map.on('popupopen', function() {  
   var clicks = 0;
+  $("#stop").css("display", "none");
 
   $('#bottone-registratore').click(function(){
       if(clicks == 0) {
@@ -50,6 +51,8 @@ map.on('popupopen', function() {
         intervalId = setInterval(function(){
         $("#bottone-registratore").fadeOut(250).fadeIn(250);
         }, 1000);
+
+        $("#stop").css("display", "inline-block");
 
         clicks++;
       } else {
@@ -61,5 +64,12 @@ map.on('popupopen', function() {
 
       }
     
+  });
+
+  $('#stop').click(function() {
+    $("#bottone-registratore").css("color", "black");
+          clearInterval(intervalId);  
+          clicks--;
+          $('#new-clip-form-modal').modal();
   });
 });
