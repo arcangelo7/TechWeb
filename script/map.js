@@ -31,7 +31,6 @@ function onLocationFound(e) {
     // Il popup non si chiude mai
     var customOptions = {
         closeButton: false,
-        autoClose: false,
         closeOnEscapeKey: false,
         closeOnClick: false
     }
