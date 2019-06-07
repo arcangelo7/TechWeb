@@ -12,13 +12,16 @@
         <h1>WHERE-M-I, TEST REGISTRAZIONE CLIP AUDIO</h1>
     </header>
     <main>
-        
+        <!--this button requests the access to the micrphone and then, starts the recording and disappears-->
         <p><button id="btnStart">START RECORDING</button><br/>
+
+        <!--this button replaces the previous one-->
+        <p><button id="btnStart2" hidden>START RECORDING</button><br/>
         <div></div>
         <button id="btnStop" disabled>STOP RECORDING</button></p>
         <div></div>
-        <p id="p1">AUDIO FEEDBACK:</p>
-        <audio controls id="aud1"></audio>
+        <p id="p1" hidden>AUDIO FEEDBACK:</p>
+        <audio controls id="aud1" hidden></audio>
         <div></div>
         <p id="p3">Clicca "START RECORDING" per avviare la registrazione della clip. Consigliamo di regolare il volume del feedback audio prima di iniziare, in quanto non è possibile durante la registrazione.</p>
         <div></div>
@@ -35,91 +38,117 @@
             video: false
         }; 
         
-        //handle older browsers that might implement getUserMedia in some way
-        if (navigator.mediaDevices === undefined) {
-            navigator.mediaDevices = {};
-            navigator.mediaDevices.getUserMedia = function(constraintObj) {
-                let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-                if (!getUserMedia) {
-                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-                }
-                return new Promise(function(resolve, reject) {
-                    getUserMedia.call(navigator, constraintObj, resolve, reject);
-                });
-            }
-        }else{
-            navigator.mediaDevices.enumerateDevices()
-            .then(devices => {
-                devices.forEach(device=>{
-                    console.log(device.kind.toUpperCase(), device.label);
-                    //, device.deviceId
-                })
-            })
-            .catch(err=>{
-                console.log(err.name, err.message);
-            })
-        }
-        navigator.mediaDevices.getUserMedia(constraintObj)
-        .then(function(mediaStreamObj) {
-            //connect the media stream to the first audio element
-            let audio = document.querySelector('audio');
-            if ("srcObject" in audio) {
-                audio.srcObject = mediaStreamObj;
-            } else {
-                //old version
-                audio.src = window.URL.createObjectURL(mediaStreamObj);
-            }
-            
-            audio.onloadedmetadata = function(ev) {
-                //show in the audio element what is being captured by the microphone
-                audio.play();
-            };
-            
-            //add listeners for saving video/audio
-            let start = document.getElementById('btnStart');
-            let stop = document.getElementById('btnStop');
-            let audSave = document.getElementById('aud2');
-            let mediaRecorder = new MediaRecorder(mediaStreamObj);
-            let chunks = [];
+        var start = document.getElementById('btnStart');
+        
             
             start.addEventListener('click', (ev)=>{
+                document.getElementById("btnStart").hidden=true;
+                document.getElementById("btnStart2").hidden=false;
+
+                //handle older browsers that might implement getUserMedia in some way
+                if (navigator.mediaDevices === undefined) {
+                    navigator.mediaDevices = {};
+                    navigator.mediaDevices.getUserMedia = function(constraintObj) {
+                        let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                        if (!getUserMedia) {
+                            return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                        }
+                        return new Promise(function(resolve, reject) {
+                            getUserMedia.call(navigator, constraintObj, resolve, reject);
+                        });
+                    }
+                }else{
+                    navigator.mediaDevices.enumerateDevices()
+                    .then(devices => {
+                        devices.forEach(device=>{
+                            console.log(device.kind.toUpperCase(), device.label);
+                            //, device.deviceId
+                        })
+                    })
+                    .catch(err=>{
+                        console.log(err.name, err.message);
+                    })
+                }
+                navigator.mediaDevices.getUserMedia(constraintObj)
+                .then(function(mediaStreamObj) {
+                    //connect the media stream to the first audio element
+                    let audio = document.querySelector('audio');
+                    if ("srcObject" in audio) {
+                        audio.srcObject = mediaStreamObj;
+                    } else {
+                        //old version
+                        audio.src = window.URL.createObjectURL(mediaStreamObj);
+                    }
+                    
+                audio.onloadedmetadata = function(ev) {
+                        //show in the audio element what is being captured by the microphone
+                    audio.play();
+                };
+            
+                //add listeners for saving video/audio
+                var start = document.getElementById('btnStart2');
+                let stop = document.getElementById('btnStop');
+                let audSave = document.getElementById('aud2');
+                let mediaRecorder = new MediaRecorder(mediaStreamObj);
+                let chunks = [];
+
                 start.disabled=true;
                 stop.disabled=false;
                 mediaRecorder.start();
                 console.log(mediaRecorder.state);
                 document.getElementById("aud1").load();
                 document.getElementById("aud1").controls=false;
+                document.getElementById("aud1").hidden=true;
                 document.getElementById("aud2").hidden=true;
                 document.getElementById("p1").hidden=true;
                 document.getElementById("p2").innerHTML = "";
                 document.getElementById("p3").innerHTML = "REGISTRAZIONE IN CORSO!";
+
+                start.addEventListener('click', (ev)=>{
+                    start.disabled=true;
+                    stop.disabled=false;
+                    mediaRecorder.start();
+                    console.log(mediaRecorder.state);
+                    document.getElementById("aud1").load();
+                    document.getElementById("aud1").controls=false;
+                    document.getElementById("aud1").hidden=true;
+                    document.getElementById("aud2").hidden=true;
+                    document.getElementById("p1").hidden=true;
+                    document.getElementById("p2").innerHTML = "";
+                    document.getElementById("p3").innerHTML = "REGISTRAZIONE IN CORSO!";
+                });
+
+                stop.addEventListener('click', (ev)=>{
+                    start.disabled=false;
+                    stop.disabled=true;
+                    mediaRecorder.stop();
+                    console.log(mediaRecorder.state);
+                    document.getElementById("aud1").pause();
+                    document.getElementById("aud1").controls=true;
+                    document.getElementById("aud1").hidden=false;
+                    document.getElementById("aud2").hidden=false;
+                    document.getElementById("p1").hidden=false;
+                    document.getElementById("p2").innerHTML = "Clicca play per riascoltare la clip:";
+                    document.getElementById("p3").innerHTML = "Registrazione conclusa.";
+                });
+                mediaRecorder.ondataavailable = function(ev) {
+                    chunks.push(ev.data);
+                }
+                mediaRecorder.onstop = (ev)=>{
+                    let blob = new Blob(chunks, { 'type' : 'audio/mp3;' });
+                    chunks = [];
+                    //var audioURL = URL.createObjectURL(blob);
+                    let audioURL = window.URL.createObjectURL(blob);
+                    audSave.src = audioURL;
+                }
+            
             })
-            stop.addEventListener('click', (ev)=>{
-                start.disabled=false;
-                stop.disabled=true;
-                mediaRecorder.stop();
-                console.log(mediaRecorder.state);
-                document.getElementById("aud1").pause();
-                document.getElementById("aud1").controls=true;
-                document.getElementById("aud2").hidden=false;
-                document.getElementById("p1").hidden=false;
-                document.getElementById("p2").innerHTML = "Clicca play per riascoltare la clip:";
-                document.getElementById("p3").innerHTML = "Registrazione conclusa.";
-            });
-            mediaRecorder.ondataavailable = function(ev) {
-                chunks.push(ev.data);
-            }
-            mediaRecorder.onstop = (ev)=>{
-                let blob = new Blob(chunks, { 'type' : 'audio/mp3;' });
-                chunks = [];
-                //var audioURL = URL.createObjectURL(blob);
-                let audioURL = window.URL.createObjectURL(blob);
-                audSave.src = audioURL;
-            }
-        })
         .catch(function(err) { 
             console.log(err.name, err.message); 
         });
+
+    })
+            
         
     </script>
 </body>
