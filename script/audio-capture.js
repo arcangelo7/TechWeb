@@ -11,6 +11,7 @@ map.on('popupopen', function() {
         
         start.addEventListener('click', (ev)=>{
 
+            start = document.getElementById('registratore-no-autorizzazione');
             //handle older browsers that might implement getUserMedia in some way
             if (navigator.mediaDevices === undefined) {
                 navigator.mediaDevices = {};
