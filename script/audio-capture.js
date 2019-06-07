@@ -6,13 +6,12 @@ map.on('popupopen', function() {
         video: false
     }; 
     
-    var start = document.getElementById('bottone-registratore');
+    var start = document.getElementById('registratore');
     
         
         start.addEventListener('click', (ev)=>{
-            // document.getElementById("bottone-registratore").hidden=true;
-            // document.getElementById("btnStart2").hidden=false;
 
+            start = document.getElementById('registratore-no-autorizzazione');
             //handle older browsers that might implement getUserMedia in some way
             if (navigator.mediaDevices === undefined) {
                 navigator.mediaDevices = {};
@@ -38,44 +37,37 @@ map.on('popupopen', function() {
             }
             navigator.mediaDevices.getUserMedia(constraintObj)
             .then(function(mediaStreamObj) {
-        
-            //add listeners for saving video/audio
-            // var start = document.getElementById('btnStart2');
-            let stop = document.getElementById('stop');
-            let audSave = document.getElementById('aud2');
-            let mediaRecorder = new MediaRecorder(mediaStreamObj);
-            let chunks = [];
-
-            start.disabled=true;
-            stop.disabled=false;
-            mediaRecorder.start();
-            console.log(mediaRecorder.state);
-            document.getElementById("aud2").hidden=true;
             
-            start.addEventListener('click', (ev)=>{
-                start.disabled=true;
-                stop.disabled=false;
+                //add listeners for saving video/audio
+                let stop = document.getElementById('stop');
+                let audSave = document.getElementById('audio');
+                let mediaRecorder = new MediaRecorder(mediaStreamObj);
+                let chunks = [];
+
                 mediaRecorder.start();
                 console.log(mediaRecorder.state);
-                document.getElementById("aud2").hidden=true;
-            });
+                document.getElementById("audio").hidden=true;
+                
+                start.addEventListener('click', (ev)=>{
+                    mediaRecorder.start();
+                    console.log(mediaRecorder.state);
+                    document.getElementById("audio").hidden=true;
+                });
 
-            stop.addEventListener('click', (ev)=>{
-                start.disabled=false;
-                stop.disabled=true;
-                mediaRecorder.stop();
-                console.log(mediaRecorder.state);
-                document.getElementById("aud2").hidden=false;
-            });
-            mediaRecorder.ondataavailable = function(ev) {
-                chunks.push(ev.data);
-            }
-            mediaRecorder.onstop = (ev)=>{
-                let blob = new Blob(chunks, { 'type' : 'audio/mp3;' });
-                chunks = [];
-                let audioURL = window.URL.createObjectURL(blob);
-                audSave.src = audioURL;
-            }
+                stop.addEventListener('click', (ev)=>{
+                    mediaRecorder.stop();
+                    console.log(mediaRecorder.state);
+                    document.getElementById("audio").hidden=false;
+                });
+                mediaRecorder.ondataavailable = function(ev) {
+                    chunks.push(ev.data);
+                }
+                mediaRecorder.onstop = (ev)=>{
+                    let blob = new Blob(chunks, { 'type' : 'audio/mp3;' });
+                    chunks = [];
+                    let audioURL = window.URL.createObjectURL(blob);
+                    audSave.src = audioURL;
+                }
         
         })
             .catch(function(err) { 

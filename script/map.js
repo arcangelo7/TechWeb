@@ -20,8 +20,17 @@ function onLocationFound(e) {
 
     var radius = e.accuracy / 2;
 
+    let popupContent = `<div class='text-center'>
+                            <h3>Tu sei qui <a type='button'></a><i id='microfono' class='fas fa-microphone'></i></h3>
+                            <p class='lead'>Clicca per creare una clip</p>
+                            <button id='registratore' class='btn btn-primary'>Crea</button>
+                            <button id='registratore-no-autorizzazione' class='btn btn-primary'>Crea</button>
+                            <button id='stop' class='btn btn-primary'>Stop</button>
+                            <audio class='mt-4' controls id='audio' hidden></audio>
+                        </div>`
+
     L.marker(e.latlng).addTo(map)
-        .bindPopup("<div class='text-center'><h3>Tu sei qui <a type='button' id='bottone-registratore'><i class='fas fa-microphone'></i></a></h3><p class='lead'>Clicca sul microfono per creare una clip</p><button id='stop' class='btn btn-primary'>Stop</button><audio class='mt-4' controls id='aud2' hidden></audio></div>").openPopup();
+        .bindPopup(popupContent).openPopup();
 
     L.circle(e.latlng, radius).addTo(map);
 
@@ -40,36 +49,24 @@ function onLocationError(e) {
 map.on('locationerror', onLocationError);
 
 // Comportamento del bottone per registrare
-map.on('popupopen', function() {  
-  var clicks = 0;
-  $("#stop").css("display", "none");
-
-  $('#bottone-registratore').click(function(){
-      if(clicks == 0) {
-        $("#bottone-registratore").css("color", "red");
-
-        intervalId = setInterval(function(){
-        $("#bottone-registratore").fadeOut(250).fadeIn(250);
-        }, 1000);
-
-        $("#stop").css("display", "inline-block");
-
-        clicks++;
-      } else {
-          $("#bottone-registratore").css("color", "black");
-          clearInterval(intervalId);  
-          clicks--;
-
-          $('#new-clip-form-modal').modal();
-
-      }
-    
+map.on('popupopen', function() { 
+  $("#stop").css("display", "none"); 
+  $("#registratore-no-autorizzazione").css("display", "none");
+  $('#registratore, #registratore-no-autorizzazione').click(function(){
+      $("#registratore").css("display", "none");
+      $("#registratore-no-autorizzazione").css("display", "none");
+      $("#stop").css("display", "inline-block");
+      $("#microfono").css("color", "red");
+      intervalId = setInterval(function(){
+        $("#microfono").fadeOut(250).fadeIn(250);
+      }, 1000);   
   });
 
   $('#stop').click(function() {
-    $("#bottone-registratore").css("color", "black");
-          clearInterval(intervalId);  
-          clicks--;
-          $('#new-clip-form-modal').modal();
+    $("#registratore-no-autorizzazione").css("display", "inline-block");
+    $("#stop").css("display", "none");
+    $("#microfono").css("color", "black");
+    clearInterval(intervalId);  
+    $('#new-clip-form-modal').modal();
   });
 });
