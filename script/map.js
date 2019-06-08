@@ -42,7 +42,7 @@ function onLocationFound(e) {
     popup = new L.popup()
         .setLatLng(e.latlng)
         .setContent(popupContent);
-    marker.addTo(map).bindPopup(popup).openPopup();
+    marker.addTo(map).bindPopup(popup, popupOptions).openPopup();
     // Disegna un cerchio intorno al marker con un raggio di 100 metri
     var circle = L.circle(e.latlng, 100).addTo(map);
     // Il marker è draggable con posizione aggiornata
