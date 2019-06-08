@@ -17,9 +17,6 @@ map.locate();
 
 // Add a marker on location found
 function onLocationFound(e) {
-
-    var radius = e.accuracy / 2;
-
     var popupContent = `<div class='text-center'>
                             <h3>Tu sei qui <a type='button'></a><i id='microfono' class='fas fa-microphone'></i></h3>
                             <p class='lead'>Clicca per creare una clip</p>
@@ -39,17 +36,20 @@ function onLocationFound(e) {
         alt: "Marker posizionato sulla tua posizione",
         draggable: true
     }
-    // Aggiungo un marker draggable con un popup che si riapre on dragend
+    // Aggiungo un marker con un popup
     var marker = new L.Marker(e.latlng, markerOptions)
     marker.bindPopup(popupContent, popupOptions).addTo(map).openPopup();
+    // Disegna un cerchio intorno al marker con un raggio di 100 metri
+    var circle = L.circle(e.latlng, 100).addTo(map);
+    // Il marker è draggable con posizione aggiornata
+    // Il popup e il circle aggiornano la loro posizione
     marker.on('dragend', function(e) { 
-        marker.openPopup();
+        var position = marker.getLatLng();
+        circle.setLatLng(position);
+        marker.setLatLng(position).openPopup();
     });   
-    L.circle(e.latlng, radius).addTo(map);
-
     // center the map on the right coordinates and zoom
-    map.setView(e.latlng, 18);
-    
+    map.setView(e.latlng, 18);    
 }
 
 map.on('locationfound', onLocationFound);
