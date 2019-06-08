@@ -1,6 +1,20 @@
 // initialize the map to show the Europe
 var map = L.map('mappa').setView([41,12], 5);
 
+// Creo un box per mostrare messaggi all'utente
+var info = L.control();
+// Should return the container DOM element for the control and add listeners on relevant map events. Called on control.addTo(map).
+info.onAdd = function () {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+// USA IL CODICE QUI SOTTO PER FAR COMPARIRE IL MESSAGGIO
+// info.update = function () {
+//     this._div.innerHTML = '<p>Errore: Impossibile geolocalizzare</p>';
+// };  
+// info.addTo(map);
+
 // add a Mapbox Streets tile layer
     // set the URL template for the tile images
     // set the attribution text and the maximum zoom level of the layer
@@ -60,7 +74,10 @@ map.on('locationfound', onLocationFound);
 
 // Show an alert if there is an error
 function onLocationError(e) {
-    alert(e.message);
+    info.update = function () {
+        this._div.innerHTML = '<p>Errore: Impossibile geolocalizzare</p>';
+    };  
+    info.addTo(map);
 }
 
 map.on('locationerror', onLocationError);
