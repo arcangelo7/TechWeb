@@ -1,4 +1,4 @@
-// initialize the map to show the entire world
+// initialize the map to show the entire world and a marker
 var map = L.map('mappa').fitWorld();
 
 // add a Mapbox Streets tile layer
@@ -29,14 +29,22 @@ function onLocationFound(e) {
                             <audio class='mt-4' controls id='audio' hidden></audio>
                         </div>`
     // Il popup non si chiude mai
-    var customOptions = {
+    var popupOptions = {
         closeButton: false,
         closeOnEscapeKey: false,
         closeOnClick: false
     }
-    L.marker(e.latlng).addTo(map)
-        .bindPopup(popupContent, customOptions).openPopup();
-
+    // Testo alternativo per l'accessibilità e possibilità di aggiustare la posizione del marker
+    var markerOptions = {
+        alt: "Marker posizionato sulla tua posizione",
+        draggable: true
+    }
+    // Aggiungo un marker draggable con un popup che si riapre on dragend
+    var marker = new L.Marker(e.latlng, markerOptions)
+    marker.bindPopup(popupContent, popupOptions).addTo(map).openPopup();
+    marker.on('dragend', function(e) { 
+        marker.openPopup();
+    });   
     L.circle(e.latlng, radius).addTo(map);
 
     // center the map on the right coordinates and zoom
