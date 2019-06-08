@@ -18,13 +18,14 @@ map.locate();
 // Add a marker on location found
 function onLocationFound(e) {
     var popupContent = `<div class='text-center'>
-                            <h3>Tu sei qui <a type='button'></a><i id='microfono' class='fas fa-microphone'></i></h3>
-                            <p class='lead'>Clicca per creare una clip</p>
-                            <button id='registratore' class='btn btn-primary'>Crea</button>
-                            <button id='registratore-no-autorizzazione' class='btn btn-primary'>Crea</button>
-                            <button id='stop' class='btn btn-primary'>Stop</button>
-                            <audio class='mt-4' controls id='audio' hidden></audio>
-                        </div>`
+                                <h3>Tu sei qui <a type='button'></a><i id='microfono' class='fas fa-microphone'></i></h3>
+                                <p id='popupText' class='lead'>Clicca per creare una clip</p>
+                                <button id='registratore' class='btn btn-primary'>Crea</button>
+                                <button id='registratore-no-autorizzazione' class='btn btn-primary'>Crea</button>
+                                <button id='stop' class='btn btn-primary'>Stop</button>
+                                <audio class='mt-4' controls id='audio' hidden></audio>
+                            </div>`
+
     // Il popup non si chiude mai
     var popupOptions = {
         closeButton: false,
@@ -37,8 +38,11 @@ function onLocationFound(e) {
         draggable: true
     }
     // Aggiungo un marker con un popup
-    var marker = new L.Marker(e.latlng, markerOptions)
-    marker.bindPopup(popupContent, popupOptions).addTo(map).openPopup();
+    var marker = new L.Marker(e.latlng, markerOptions);
+    popup = new L.popup()
+        .setLatLng(e.latlng)
+        .setContent(popupContent);
+    marker.addTo(map).bindPopup(popup).openPopup();
     // Disegna un cerchio intorno al marker con un raggio di 100 metri
     var circle = L.circle(e.latlng, 100).addTo(map);
     // Il marker è draggable con posizione aggiornata
@@ -63,9 +67,10 @@ map.on('locationerror', onLocationError);
 
 // Comportamento del bottone per registrare
 map.on('popupopen', function() { 
-  $("#stop").css("display", "none"); 
+  $("#stop").css("display", "none");
   $("#registratore-no-autorizzazione").css("display", "none");
-  $('#registratore, #registratore-no-autorizzazione').click(function(){
+  $('#registratore, #registratore-no-autorizzazione').click(function()
+  {
       $("#registratore").css("display", "none");
       $("#registratore-no-autorizzazione").css("display", "none");
       $("#stop").css("display", "inline-block");
@@ -73,13 +78,14 @@ map.on('popupopen', function() {
       intervalId = setInterval(function(){
         $("#microfono").fadeOut(250).fadeIn(250);
       }, 1000);   
+      $("#popupText").text("Clicca per stoppare");
   });
-
-  $('#stop').click(function() {
-    $("#registratore-no-autorizzazione").css("display", "inline-block");
+  $('#stop').click(function() 
+  {
     $("#stop").css("display", "none");
-    $("#microfono").css("color", "black");
+    $("#registratore-no-autorizzazione").css("display", "inline-block");
     clearInterval(intervalId);  
+    $("#popupText").text("Clicca per creare una clip");
     $('#new-clip-form-modal').modal();
   });
 });
