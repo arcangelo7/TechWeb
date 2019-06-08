@@ -1,5 +1,5 @@
-// initialize the map to show the entire world and a marker
-var map = L.map('mappa').fitWorld();
+// initialize the map to show the Europe
+var map = L.map('mappa').setView([41,12], 5);
 
 // add a Mapbox Streets tile layer
     // set the URL template for the tile images
@@ -65,7 +65,7 @@ function onLocationError(e) {
 
 map.on('locationerror', onLocationError);
 
-// Comportamento del bottone per registrare
+// Comportamento dell'interfaccia per registrare
 map.on('popupopen', function() { 
   $("#stop").css("display", "none");
   $("#registratore-no-autorizzazione").css("display", "none");
