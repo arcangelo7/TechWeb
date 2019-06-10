@@ -11,7 +11,6 @@ map.on('popupopen', function() {
         
         start.addEventListener('click', (ev)=>{
 
-            start = document.getElementById('registratore-no-autorizzazione');
             //handle older browsers that might implement getUserMedia in some way
             if (navigator.mediaDevices === undefined) {
                 navigator.mediaDevices = {};
@@ -33,17 +32,20 @@ map.on('popupopen', function() {
                 })
                 .catch(err=>{
                     console.log(err.name, err.message);
+                    alert(err.name, err.message);
                 })
             }
             navigator.mediaDevices.getUserMedia(constraintObj)
             .then(function(mediaStreamObj) {
             
                 //add listeners for saving video/audio
+                start = document.getElementById('registratore-no-autorizzazione');
                 let stop = document.getElementById('stop');
                 let audSave = document.getElementById('audio');
                 let mediaRecorder = new MediaRecorder(mediaStreamObj);
                 let chunks = [];
 
+                while(navigator.mediadevices = true){
                 mediaRecorder.start();
                 console.log(mediaRecorder.state);
                 document.getElementById("audio").hidden=true;
@@ -68,10 +70,53 @@ map.on('popupopen', function() {
                     let audioURL = window.URL.createObjectURL(blob);
                     audSave.src = audioURL;
                 }
+            }
         
         })
             .catch(function(err) { 
-                console.log(err.name, err.message); 
+                console.log(err.name, err.message);
+                if(err.name=="AbortError"){
+                    info.update = function () {
+                        this._div.innerHTML = '<p>Errore: qualcosa ha impedito il funzionamento del sito. Ricaricare la pagina</p>';
+                        };  
+                        info.addTo(map);
+                }
+                else if(err.name=="NotAllowedError"){
+                            info.update = function () {
+                                this._div.innerHTML = '<p>Errore: accesso al microfono non consentito. Registrazione non possibile </p>';
+                                };  
+                                info.addTo(map);
+                }
+                else if(err.name=="NotFoundError"){
+                    info.update = function () {
+                        this._div.innerHTML = '<p>Errore: Impossibile trovare la traccia audio</p>';
+                        };  
+                        info.addTo(map);
+                }
+                else if(err.name=="NotReadableError"){
+                    info.update = function () {
+                        this._div.innerHTML = '<p>Errore: Impossibile accedere al microfono a causa di un problema software o hardware</p>';
+                        };  
+                        info.addTo(map);
+                }
+                else if(err.name=="OverconstrainedError"){
+                    info.update = function () {
+                        this._div.innerHTML = err.message;
+                        };  
+                        info.addTo(map);
+                }
+                else if(err.name=="SecurityError"){
+                    info.update = function () {
+                        this._div.innerHTML = '<p>Errore: la funzionalità richiesta è disabilitata a causa di qualche impostazione di sicurezza</p>';
+                        };  
+                        info.addTo(map);
+                }
+                else if(err.name=="TypeError"){
+                    info.update = function () {
+                        this._div.innerHTML = '<p>Errore: flusso multimediale non specificato</p>';
+                        };  
+                        info.addTo(map);
+                }
             });
 
         });
