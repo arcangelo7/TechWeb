@@ -1,0 +1,22 @@
+{
+  "name": "whereami",
+  "version": "1.0.0",
+  "description": "Progetto di Tecnologie Web",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arcangelo7/TechWeb.git"
+  },
+  "author": "Arcangelo Massari, Gioele Bolletta, Nicola Bina",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arcangelo7/TechWeb/issues"
+  },
+  "homepage": "https://github.com/arcangelo7/TechWeb#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
