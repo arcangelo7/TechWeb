@@ -32,7 +32,7 @@ map.locate();
 // Add a marker on location found
 function onLocationFound(e) {
     var popupContent = `<div class='text-center'>
-                                <h3>Tu sei qui <a type='button'></a><i id='microfono' class='fas fa-microphone'></i></h3>
+                                <h3>Tu sei qui <i id='microfono' class='fas fa-microphone'></i></h3>
                                 <p id='popupText' class='lead'>Clicca per creare una clip</p>
                                 <button id='registratore' class='btn btn-primary'>Crea</button>
                                 <button id='registratore-no-autorizzazione' class='btn btn-primary'>Crea</button>
