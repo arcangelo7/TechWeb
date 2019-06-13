@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <main>
+
+        <div id="div1"></div>
+
+    </main>
+</body>
+    <script>
+        
+        var tag;
+        var title;
+        var elem = document.getElementById("div1");
+
+        $.getJSON('http://localhost:3000/AudioList', function(a) {
+        
+        for( i in a){
+            tag = document.createElement("p");
+            title = document.createTextNode(a[i].title);
+            tag.appendChild(title);
+            elem.appendChild(tag);
+            tag = document.createElement("audio");
+            tag.setAttribute("id", "aud" + i);
+            elem.appendChild(tag);
+            document.getElementById("aud" + i).controls=true;
+            $("#aud" + i).attr("src", a[i].file);
+
+        }
+        
+    }).fail(function(){
+        console.log("errore");
+    });
+    
+    </script>
+
+</html>
