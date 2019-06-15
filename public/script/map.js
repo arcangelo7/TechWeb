@@ -67,7 +67,9 @@ function onLocationFound(e) {
         marker.setLatLng(position).openPopup();
     });   
     // center the map on the right coordinates and zoom
-    map.setView(e.latlng, 18);    
+    map.setView(e.latlng, 18);
+    
+    coordinate = marker.getLatLng();
 }
 
 map.on('locationfound', onLocationFound);
