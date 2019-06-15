@@ -43,7 +43,7 @@ new Vue({
 			{
 				this.titolo = tit
 				this.testo = text
-				var geo = "8FPHF8VV+57"; //coordinate di esempio(da tenere fino a quando non otteniamo quelle vere)
+				var geo = OpenLocationCode.encode(coordinate.lat, coordinate.lng);
 				var pur = this.purpose_picked;
 				var ilan = language_nome.indexOf(this.language_selected)
 				var icon = content_nome.indexOf(this.content_selected)
