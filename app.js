@@ -58,6 +58,11 @@ app.use((req , res, next)=>{
     next();
 });
 
+// ROUTE PER PAGINA INDEX.HTML
+app.get('/', (req, res)=>{
+    res.render('index');
+});
+
 // ROUTE PER PAGINA MAPPA.HTML
 app.get('/mappa', (req, res)=>{
     res.sendFile('mappa.html', {root: __dirname + '/public'});
@@ -141,7 +146,7 @@ app.get('/logout', (req, res)=>{
     // Invoking logout() will remove the req.user property and clear the login session (if any).
     req.logout();
     req.flash('msg_successo', "Sei disconesso. Ciao, alla prossima sessione");
-    res.redirect('/login');
+    res.redirect('/');
 });
 
 var port = 8000
