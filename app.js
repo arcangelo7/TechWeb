@@ -1,31 +1,35 @@
-var express = require('express');
+const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const exphbs  = require('express-handlebars');
 const flash= require('connect-flash');
 const session = require('express-session');
+const passport = require('passport');
 
 var app = express();
 
 // Dove cercare i file statici da renderizzare
 app.use(express.static(__dirname + '/public'));
 
-//CONNESSIONE A MONGOOSE
+// INTEGRAZIONE FILE CONFIG PASSPORT
+require('./config/passport')(passport);
+
+// CONNESSIONE A MONGOOSE
 // mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/whereami', {useNewUrlParser: true})
   .then(() => console.log(' Server connesso'))
   .catch(err => console.log(err));
 
-//SCHEMA E MODELLO PER UTENTI
+// SCHEMA E MODELLO PER UTENTI
 require('./models/utenti.js');
 const Utenti = mongoose.model('utenti');
 
-//MIDDLEWARE PER HANDLEBARS
+// MIDDLEWARE PER HANDLEBARS
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-//BODY PARSER MIDDLEWARE
+// MIDDLEWARE BODY PARSER
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
 
@@ -36,6 +40,10 @@ app.use(session({
     saveUninitialized: false,
 }));
 
+// MIDDLEWARE PASSPORT
+app.use(passport.initialize());
+app.use(passport.session()); // Al login apro una sessione
+
 //MIDDLEWARE PER MESSAGGI FLASH
 app.use(flash());
 
@@ -43,10 +51,14 @@ app.use(flash());
 app.use((req , res, next)=>{
     res.locals.msg_successo = req.flash('msg_successo');
     res.locals.msg_errore = req.flash('msg_errore');
+    // Messaggi per passport
+    res.locals.error = req.flash("error");
+    // Variabile globale contenente l'utente loggato, se c'è
+    res.locals.error = req.user;
     next();
 });
 
-// Route per pagina index.html
+// ROUTE PER PAGINA MAPPA.HTML
 app.get('/mappa', (req, res)=>{
     res.sendFile('mappa.html', {root: __dirname + '/public'});
 });
@@ -111,6 +123,25 @@ app.post('/registrazione', (req, res) => {
             }
         });
     }
+});
+
+// GESTIONE  LOGIN
+app.post('/login', (req, res, next)=>{
+    passport.authenticate('local', {
+        successRedirect: '/mappa',
+        failureRedirect: '/login',
+        failureFlash: true // return a message called error, using the message options set by the verify callback 
+    })(req, res, next); //curryng: that the first function returns another function and then that returned function is called immediately
+});
+
+
+// GESTIONE LOGOUT
+app.get('/logout', (req, res)=>{
+    // Passport function
+    // Invoking logout() will remove the req.user property and clear the login session (if any).
+    req.logout();
+    req.flash('msg_successo', "Sei disconesso. Ciao, alla prossima sessione");
+    res.redirect('/login');
 });
 
 var port = 8000
