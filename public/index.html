@@ -87,7 +87,10 @@
                             <div id="purpose" class="row">
                                 <label for="check-scopo" class="col-sm-2 col-form-label">Scopo</label>
                                 <div id="check-scopo" class="col-sm-10">
-                                    <componentpurpose v-for="opzione_purpose in purpose_opzioni" v-model="purpose_picked" :nome=opzione_purpose></componentpurpose>
+                                    <input class="form-check-input" type="radio" name="scopo" :value=opzione_purpose v-model="purpose_picked">
+                                        <label class="form-check-label" for=opzione_purpose>
+                                            {{ opzione_purpose }}
+                                        </label>
                                 </div>
                             </div>
                             <div id="language" class="form-group row">
