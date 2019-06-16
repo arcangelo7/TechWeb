@@ -24,7 +24,7 @@ mongoose.connect('mongodb://localhost/whereami', {useNewUrlParser: true})
   .catch(err => console.log(err));
 
 // SCHEMA E MODELLO PER UTENTI
-require('./models/utenti.js');
+require('./models/utenti');
 const Utenti = mongoose.model('utenti');
 
 // MIDDLEWARE PER HANDLEBARS
@@ -56,7 +56,7 @@ app.use((req , res, next)=>{
     // Messaggi per passport
     res.locals.error = req.flash("error");
     // Variabile globale contenente l'utente loggato, se c'è
-    res.locals.error = req.user;
+    res.locals.user = req.user;
     next();
 });
 
