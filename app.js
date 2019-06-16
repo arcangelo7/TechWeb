@@ -7,6 +7,8 @@ const flash= require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 
+const {accessoSicuro} = require('./helpers/auth');
+
 var app = express();
 
 // Dove cercare i file statici da renderizzare
@@ -64,7 +66,7 @@ app.get('/', (req, res)=>{
 });
 
 // ROUTE PER PAGINA MAPPA.HTML
-app.get('/mappa', (req, res)=>{
+app.get('/mappa', accessoSicuro, (req, res)=>{
     res.sendFile('mappa.html', {root: __dirname + '/public'});
 });
 
