@@ -31,15 +31,7 @@ new Vue({
 		insert : function(){
 			var tit = document.getElementById("titolo").value;
 			var text = document.getElementById("testo").value;
-			if(tit == '')
-			{
-				alert("Errore titolo vuoto")
-			}
-			else if(text == '')
-			{
-				alert("Errore testo vuoto")
-			}
-			else
+			if(tit != '' && text != '')
 			{
 				this.titolo = tit
 				this.testo = text
@@ -50,6 +42,10 @@ new Vue({
 				var iaud = audience_nome.indexOf(this.audience_selected)
 				var idet = detail_significato.indexOf(this.detail_selected)
 				this.stringa_metadati = geo + ":" + pur + ":" + language_sigla[ilan] + ":" + content_sigla[icon] + ":A" + audience_sigla[iaud] + ":P" + detail_numero[idet]
+				$('#new-clip-form-modal').modal('hide');
+				$('#metadati').submit(function () {
+					return false;
+				});
 			}
 		},
 		translate : function(){
