@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const exphbs  = require('express-handlebars');
+const path = require('path');
 const flash= require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
@@ -28,8 +29,9 @@ require('./models/utenti');
 const Utenti = mongoose.model('utenti');
 
 // MIDDLEWARE PER HANDLEBARS
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', '.hbs');
 
 // MIDDLEWARE BODY PARSER
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
@@ -65,7 +67,7 @@ app.get('/', (req, res)=>{
     res.render('index');
 });
 
-// ROUTE PER PAGINA MAPPA.HTML
+/// ROUTE PER PAGINA MAPPA.HTML
 app.get('/mappa', accessoSicuro, (req, res)=>{
     res.sendFile('mappa.html', {root: __dirname + '/public'});
 });
@@ -81,7 +83,7 @@ app.get('/login' , (req , res)=>{
 })
 
 //GESTIONE FORM REGISTRAZIONE
-app.post('/registrazione', (req, res) => {  
+app.post('/registrazione', (req, res) => {
     let errori = [];
     if(req.body.password != req.body.conferma_psw){
         errori.push({text: 'Password non corrispondenti'});
@@ -112,10 +114,10 @@ app.post('/registrazione', (req, res) => {
                     password: req.body.password
                 });
 
-                bcrypt.genSalt(10, (err, salt)=>{
-                    bcrypt.hash(nuovoUtente.password, salt, (err, hash)=>{
-                        if(err) throw err;
-                        nuovoUtente.password = hash;
+//                bcrypt.genSalt(10, (err, salt)=>{
+//                    bcrypt.hash(nuovoUtente.password, salt, (err, hash)=>{
+//                        if(err) throw err;
+//                        nuovoUtente.password = hash;
                         nuovoUtente.save()
                             .then(utente =>{
                                 req.flash('msg_successo', 'Bene, ti sei registrato');
@@ -125,8 +127,8 @@ app.post('/registrazione', (req, res) => {
                                 console.log(err);
                                 return
                             });
-                    });
-                });
+//                    });
+//                });
             }
         });
     }
@@ -137,8 +139,8 @@ app.post('/login', (req, res, next)=>{
     passport.authenticate('local', {
         successRedirect: '/mappa',
         failureRedirect: '/login',
-        failureFlash: true // return a message called error, using the message options set by the verify callback 
-    })(req, res, next); //curryng: that the first function returns another function and then that returned function is called immediately
+        failureFlash: true // return a message called error, using the message options set by the verify callback
+    })(req, res, next); //curryng: that the first function returns another function and then that returned function is called immedia$
 });
 
 
@@ -154,4 +156,4 @@ app.get('/logout', (req, res)=>{
 var port = 8000
 app.listen(port, ()=>{
     console.log(`Running on port ${port}`);
-})
+});
