@@ -9,11 +9,18 @@ info.onAdd = function () {
     this.update();
     return this._div;
 };
-// USA IL CODICE QUI SOTTO PER FAR COMPARIRE IL MESSAGGIO
-// info.update = function () {
-//     this._div.innerHTML = '<p>Errore: Impossibile geolocalizzare</p>';
-// };  
-// info.addTo(map);
+
+// Pulsante aggiorna posizione
+var aggiornaPosizione = L.control({position: 'bottomright'});
+aggiornaPosizione.onAdd = function () {
+    this._div = L.DomUtil.create('div', 'aggiornaPosizione'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+aggiornaPosizione.update = function () {
+    this._div.innerHTML = '<button class="btn btn-primary"><i class="fas fa-location-arrow fa-lg"></i></button>';
+};  
+aggiornaPosizione.addTo(map);
 
 // add a Mapbox Streets tile layer
     // set the URL template for the tile images
@@ -28,6 +35,10 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 // Geolocation
 map.locate({enableHighAccuracy: true});
+
+$(".aggiornaPosizione").click(function(){
+    map.locate({enableHighAccuracy: true});
+});
 
 // Add a marker on location found
 function onLocationFound(e) {
