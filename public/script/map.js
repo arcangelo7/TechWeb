@@ -21,24 +21,53 @@ info.onAdd = function () {
     // in order to use tiles from Mapbox, I've also requested an access token
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
+    maxZoom: 20,
     id: 'mapbox.streets',
     accessToken: 'pk.eyJ1IjoiYXJjYW5nZWxvNyIsImEiOiJjandnbTA1cGQxOTdkNGFvM2E0MXNtenhyIn0.3KYZtLTolcDAj7zagvi2sQ'
 }).addTo(map);
 
+function manipolaPopupRegistrazione(){
+  $('#registratore, #registratore-no-autorizzazione').click(function()
+  {
+      document.getElementById("registratore").hidden = true;
+      document.getElementById("registratore-no-autorizzazione").hidden = true;
+      document.getElementById("stop").hidden = false;
+      $("#microfono").css("color", "red");
+   
+      $("#popupText").text("Clicca per stoppare");
+  });
+  $('#stop').click(function() 
+  {
+    document.getElementById("stop").hidden = true;
+    document.getElementById("registratore-no-autorizzazione").hidden = false;
+    document.getElementById("audio").hidden = false;
+    $("#microfono").css("color", "black");
+    $("#popupText").text("Clicca per creare una clip");
+    $('#new-clip-form-modal').modal();
+  });    
+}
+
 // Geolocation
-map.locate();
+map.locate({enableHighAccuracy: true});
+// Monitora la posizione corrente
+navigator.geolocation.watchPosition(manipolaPopupRegistrazione);
 
 // Add a marker on location found
 function onLocationFound(e) {
+    map.eachLayer(function(layer) {
+        // Remove all layers except the background (tilelayer). Evita che a ogni aggiornamento di posizione rimangano i vecchi marker e circle
+        if (!(layer instanceof L.TileLayer)) {
+            map.removeLayer(layer);
+        }
+    }); 
     var popupContent = `<div class='text-center'>
                                 <h3>Tu sei qui <i id='microfono' class='fas fa-microphone'></i></h3>
                                 <p id='popupText' class='lead'>Clicca per creare una clip</p>
                                 <button id='registratore' class='btn btn-primary'>Crea</button>
-                                <button id='registratore-no-autorizzazione' class='btn btn-primary'>Crea</button>
-                                <button id='stop' class='btn btn-primary'>Stop</button>
+                                <button id='registratore-no-autorizzazione' class='btn btn-primary' hidden>Crea</button>
+                                <button id='stop' class='btn btn-primary' hidden>Stop</button>
                                 <audio class='mt-4' controls id='audio' hidden></audio>
-                            </div>`
+                        </div>`
 
     // Il popup non si chiude mai
     var popupOptions = {
@@ -74,7 +103,7 @@ function onLocationFound(e) {
 
 map.on('locationfound', onLocationFound);
 
-// Show an alert if there is an error
+// Show a message if there is an error
 function onLocationError(e) {
     info.update = function () {
         this._div.innerHTML = '<p>Errore: Impossibile geolocalizzare</p>';
@@ -85,26 +114,4 @@ function onLocationError(e) {
 map.on('locationerror', onLocationError);
 
 // Comportamento dell'interfaccia per registrare
-map.on('popupopen', function() { 
-  $("#stop").css("display", "none");
-  $("#registratore-no-autorizzazione").css("display", "none");
-  $('#registratore, #registratore-no-autorizzazione').click(function()
-  {
-      $("#registratore").css("display", "none");
-      $("#registratore-no-autorizzazione").css("display", "none");
-      $("#stop").css("display", "inline-block");
-      $("#microfono").css("color", "red");
-      intervalId = setInterval(function(){
-        $("#microfono").fadeOut(250).fadeIn(250);
-      }, 1000);   
-      $("#popupText").text("Clicca per stoppare");
-  });
-  $('#stop').click(function() 
-  {
-    $("#stop").css("display", "none");
-    $("#registratore-no-autorizzazione").css("display", "inline-block");
-    clearInterval(intervalId);  
-    $("#popupText").text("Clicca per creare una clip");
-    $('#new-clip-form-modal').modal();
-  });
-});
+map.on('popupopen', manipolaPopupRegistrazione);
