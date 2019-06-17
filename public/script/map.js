@@ -26,31 +26,8 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: 'pk.eyJ1IjoiYXJjYW5nZWxvNyIsImEiOiJjandnbTA1cGQxOTdkNGFvM2E0MXNtenhyIn0.3KYZtLTolcDAj7zagvi2sQ'
 }).addTo(map);
 
-function manipolaPopupRegistrazione(){
-  $('#registratore, #registratore-no-autorizzazione').click(function()
-  {
-      document.getElementById("registratore").hidden = true;
-      document.getElementById("registratore-no-autorizzazione").hidden = true;
-      document.getElementById("stop").hidden = false;
-      $("#microfono").css("color", "red");
-   
-      $("#popupText").text("Clicca per stoppare");
-  });
-  $('#stop').click(function() 
-  {
-    document.getElementById("stop").hidden = true;
-    document.getElementById("registratore-no-autorizzazione").hidden = false;
-    document.getElementById("audio").hidden = false;
-    $("#microfono").css("color", "black");
-    $("#popupText").text("Clicca per creare una clip");
-    $('#new-clip-form-modal').modal();
-  });    
-}
-
 // Geolocation
 map.locate({enableHighAccuracy: true});
-// Monitora la posizione corrente
-navigator.geolocation.watchPosition(manipolaPopupRegistrazione);
 
 // Add a marker on location found
 function onLocationFound(e) {
@@ -112,6 +89,27 @@ function onLocationError(e) {
 }
 
 map.on('locationerror', onLocationError);
+
+function manipolaPopupRegistrazione(){
+  $('#registratore, #registratore-no-autorizzazione').click(function()
+  {
+      document.getElementById("registratore").hidden = true;
+      document.getElementById("registratore-no-autorizzazione").hidden = true;
+      document.getElementById("stop").hidden = false;
+      $("#microfono").css("color", "red");
+   
+      $("#popupText").text("Clicca per stoppare");
+  });
+  $('#stop').click(function() 
+  {
+    document.getElementById("stop").hidden = true;
+    document.getElementById("registratore-no-autorizzazione").hidden = false;
+    document.getElementById("audio").hidden = false;
+    $("#microfono").css("color", "black");
+    $("#popupText").text("Clicca per creare una clip");
+    $('#new-clip-form-modal').modal();
+  });    
+}
 
 // Comportamento dell'interfaccia per registrare
 map.on('popupopen', manipolaPopupRegistrazione);
