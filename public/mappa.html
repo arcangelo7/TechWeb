@@ -63,7 +63,7 @@
     </nav>
 
     
-    <div id="metadati">
+    <form id="metadati" method="post">
         <div id="new-clip-form-modal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -74,80 +74,78 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="nuovaClip">
-                            <div class="form-group row">
-                                <label for="titolo" class="col-sm-2 col-form-label">Titolo</label>
-                                <div class="col-sm-10">
-                                    <input type="texts" class="form-control" id="titolo" placeholder="Piazza Maggiore">
+                        <div class="form-group row">
+                            <label for="titolo" class="col-sm-2 col-form-label">Titolo</label>
+                            <div class="col-sm-10">
+                                <input type="texts" class="form-control" id="titolo" placeholder="Piazza Maggiore" required="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="testo" class="col-sm-2 col-form-label">Testo</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="testo" rows="3" required="true"></textarea>
+                            </div>
+                        </div>
+                        <div id="purpose" class="row">
+                            <label for="check-scopo" class="col-sm-2 col-form-label">Scopo</label>
+                            <div id="check-scopo" class="col-sm-10">
+                                <div class="form-check form-check-inline" v-for="opzione_purpose in purpose_opzioni">
+                                    <input class="form-check-input" type="radio" name="scopo" :value=opzione_purpose v-model="purpose_picked">
+                                    <label class="form-check-label" for=opzione_purpose>
+                                        {{ opzione_purpose }}
+                                    </label>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="testo" class="col-sm-2 col-form-label">Testo</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" id="testo" rows="3"></textarea>
-                                </div>
+                        </div>
+                        <div id="language" class="form-group row">
+                            <label for="linguaggio" class="col-sm-2 col-form-label">Lingua</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="linguaggio" v-model="language_selected">
+                                    <option v-for="opzione_language in language_opzioni" :value="opzione_language">
+                                        {{ opzione_language }}
+                                    </option>
+                                </select>
                             </div>
-                            <div id="purpose" class="row">
-                                <label for="check-scopo" class="col-sm-2 col-form-label">Scopo</label>
-                                <div id="check-scopo" class="col-sm-10">
-                                    <div class="form-check form-check-inline" v-for="opzione_purpose in purpose_opzioni">
-                                        <input class="form-check-input" type="radio" name="scopo" :value=opzione_purpose v-model="purpose_picked">
-                                        <label class="form-check-label" for=opzione_purpose>
-                                            {{ opzione_purpose }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="language" class="form-group row">
-                                <label for="linguaggio" class="col-sm-2 col-form-label">Lingua</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" id="linguaggio" v-model="language_selected">
-                                        <option v-for="opzione_language in language_opzioni" :value="opzione_language">
-                                            {{ opzione_language }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="content" class="form-group row">
-                                <label for="categoria" class="col-sm-2 col-form-label">Categoria</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" id="categoria" v-model="content_selected">
-                                        <option v-for="opzione_content in content_opzioni" :value="opzione_content">
+                        </div>
+                        <div id="content" class="form-group row">
+                            <label for="categoria" class="col-sm-2 col-form-label">Categoria</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="categoria" v-model="content_selected">
+                                    <option v-for="opzione_content in content_opzioni" :value="opzione_content">
                                         {{ opzione_content }}
-                                        </option>
-                                    </select>
-                                </div>
+                                    </option>
+                                </select>
                             </div>
-                            <div id="audience" class="form-group row">
-                                <label for="pubblico" class="col-sm-2 col-form-label">Pubblico</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" id="pubblico" v-model="audience_selected">
-                                        <option v-for="opzione_audience in audience_opzioni" v-bind:value="opzione_audience">
-                                            {{ opzione_audience }}
-                                        </option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div id="audience" class="form-group row">
+                            <label for="pubblico" class="col-sm-2 col-form-label">Pubblico</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="pubblico" v-model="audience_selected">
+                                    <option v-for="opzione_audience in audience_opzioni" v-bind:value="opzione_audience">
+                                        {{ opzione_audience }}
+                                    </option>
+                                </select>
                             </div>
-                            <div id="detail" class="form-group row">
-                                <label for="dettaglio" class="col-sm-2 col-form-label">Dettaglio</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" id="dettaglio" v-model="detail_selected">
-                                        <option v-for="opzione_detail in detail_opzioni" v-bind:value="opzione_detail">
-                                            {{ opzione_detail }}
-                                        </option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div id="detail" class="form-group row">
+                            <label for="dettaglio" class="col-sm-2 col-form-label">Dettaglio</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="dettaglio" v-model="detail_selected">
+                                    <option v-for="opzione_detail in detail_opzioni" v-bind:value="opzione_detail">
+                                        {{ opzione_detail }}
+                                    </option>
+                                </select>
                             </div>
-                        </form>                        
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" v-on:click="insert()" data-dismiss="modal">Salva</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="submit" class="btn btn-primary" v-on:click="insert()">Salva</button>
+                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
                     </div>
                 </div>
             </div>
         </div>     
-    </div> 
+    </form> 
   
 
     <div id="mappa"></div>
