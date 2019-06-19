@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-//const bcrypt = require('bcrypt');
 const exphbs  = require('express-handlebars');
 const path = require('path');
 const flash= require('connect-flash');
@@ -18,9 +17,12 @@ app.use(express.static(__dirname + '/public'));
 // INTEGRAZIONE FILE CONFIG PASSPORT
 require('./config/passport')(passport);
 
+// INTEGRAZIONE FILE CONFIG DATABASE
+const db = require('./config/database');
+
 // CONNESSIONE A MONGOOSE
 // mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/whereami', {useNewUrlParser: true})
+mongoose.connect(db.mongoURI, {useNewUrlParser: true})
   .then(() => console.log(' Server connesso'))
   .catch(err => console.log(err));
 
