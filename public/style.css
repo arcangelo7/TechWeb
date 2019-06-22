@@ -1,0 +1,25 @@
+/*To show a full-screen map*/
+#mappa { height: calc(100vh - 56px); }
+
+.info {
+    padding: 10px;
+    font-size: 2em;
+    color: #B87F84;
+    background-color: #F8D7DA;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+.info p {
+    margin: 0;
+}
+
+/*To show microphone's button without the appearance of a button*/
+#bottone-registratore { 
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+}
+
