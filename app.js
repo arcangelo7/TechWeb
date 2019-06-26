@@ -36,6 +36,10 @@ app.use(session({
     saveUninitialized: false,
 }));
 
+// MIDDLEWARE PASSPORT
+app.use(passport.initialize());
+app.use(passport.session()); // Al login apro una sessione
+
 //VARIABILI GLOBALI PER MESSAGGI FLASH
 app.use((req , res, next)=>{
     res.locals.msg_successo = req.flash('msg_successo');
@@ -46,10 +50,6 @@ app.use((req , res, next)=>{
     res.locals.user = req.user;
     next();
 });
-
-// MIDDLEWARE PASSPORT
-app.use(passport.initialize());
-app.use(passport.session()); // Al login apro una sessione
 
 // ROUTE PER PAGINA INDEX.HTML
 app.get('/', (req, res)=>{
