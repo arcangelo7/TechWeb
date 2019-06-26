@@ -57,12 +57,12 @@ app.get('/', (req, res)=>{
 });
 
 /// ROUTE PER PAGINA MAPPA.HTML
-app.get('/mappa', accessoSicuro, (req, res)=>{
+app.get('/editor-mappa', accessoSicuro, (req, res)=>{
     res.render('mappaEditor');
 });
 
 //GESTIONE DEI POST DI MAPPA.THYML
-app.post('/mappa',function(req, res) {
+app.post('/editor-mappa',function(req, res) {
 	if(req.body.audio != undefined)
 	{
 		var db = dbconn.get();
@@ -71,7 +71,7 @@ app.post('/mappa',function(req, res) {
 			if(err) res.send("Errore: impossibile inserire clip all'interno del database"); //da controllare(da cambiare con flash magari)
 		});
 	}
-	res.redirect('/mappa');
+	res.redirect('/editor-mappa');
 });
 
 //ROUTE DELLA PAGINA CHE MOSTRA LE CLIP(TEMPORANEA)
@@ -135,7 +135,7 @@ app.post("/registrazione", (req, res)=>{
 // GESTIONE  LOGIN
 app.post('/login', (req, res, next)=>{
     passport.authenticate('local', {
-        successRedirect: '/mappa',
+        successRedirect: '/editor-mappa',
         failureRedirect: '/login',
         failureFlash: true // return a message called error, using the message options set by the verify callback
     })(req, res, next); //curryng: that the first function returns another function and then that returned function is called immedia$

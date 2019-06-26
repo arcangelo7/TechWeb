@@ -108,3 +108,5 @@ function manipolaPopupRegistrazione(){
 
 // Comportamento dell'interfaccia per registrare
 map.on('popupopen', manipolaPopupRegistrazione);
+
+$("a[href='/editor-mappa']").addClass("active");

@@ -57,3 +57,5 @@ function onLocationError(e) {
 }
 
 map.on('locationerror', onLocationError);
+
+$("a[href='/']").addClass("active");
