@@ -1,6 +1,12 @@
+img {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
 /*To show a full-screen map*/
-#mappa { height: calc(100vh - 56px); }
-
+#mappa { 
+    height: calc(100vh - 56px);
+}
 .info {
     padding: 10px;
     font-size: 2em;
@@ -12,7 +18,6 @@
 .info p {
     margin: 0;
 }
-
 /*To show microphone's button without the appearance of a button*/
 #bottone-registratore { 
     appearance: none;

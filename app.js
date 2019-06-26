@@ -58,7 +58,7 @@ app.get('/', (req, res)=>{
 
 /// ROUTE PER PAGINA MAPPA.HTML
 app.get('/mappa', accessoSicuro, (req, res)=>{
-    res.sendFile('mappa.html', {root: __dirname + '/views'});
+    res.render('mappa');
 });
 
 //GESTIONE DEI POST DI MAPPA.THYML
