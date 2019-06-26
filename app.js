@@ -53,12 +53,12 @@ app.use((req , res, next)=>{
 
 // ROUTE PER PAGINA INDEX.HTML
 app.get('/', (req, res)=>{
-    res.render('index');
+    res.render('mappaBrowser');
 });
 
 /// ROUTE PER PAGINA MAPPA.HTML
 app.get('/mappa', accessoSicuro, (req, res)=>{
-    res.render('mappa');
+    res.render('mappaEditor');
 });
 
 //GESTIONE DEI POST DI MAPPA.THYML

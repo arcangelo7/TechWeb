@@ -24,10 +24,6 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 // Geolocation
 map.locate({enableHighAccuracy: true});
 
-$(".aggiornaPosizione").click(function(){
-    map.locate({enableHighAccuracy: true});
-});
-
 // Add a marker on location found
 function onLocationFound(e) {
     map.eachLayer(function(layer) {
