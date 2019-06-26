@@ -14,6 +14,9 @@ var app = express();
 require('./config/passport')(passport);
 const {accessoSicuro} = require('./config/auth.js');
 
+// DOVE CERCARE I FILE STATICI 
+app.use(express.static( __dirname + "/public" ));
+
 // MIDDLEWARE BODY PARSER
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
@@ -47,9 +50,6 @@ app.use((req , res, next)=>{
 // MIDDLEWARE PASSPORT
 app.use(passport.initialize());
 app.use(passport.session()); // Al login apro una sessione
-
-// Dove trovare i file statici di index
-app.use(express.static('views/img')); 
 
 // ROUTE PER PAGINA INDEX.HTML
 app.get('/', (req, res)=>{
@@ -149,10 +149,6 @@ app.get('/logout', (req, res)=>{
     req.flash('msg_successo', "Sei disconesso. Ciao, alla prossima sessione");
     res.redirect('/');
 });
-
-// DOVE CERCARE I FILE STATICI AD ACCESSO SICURO DA RENDERIZZARE
-// Va dopo la route di login perché reindirizza a login
-app.use( [ accessoSicuro, express.static( __dirname + "/public" ) ] );
 
 var port = 8000
 app.listen(port, ()=>{
