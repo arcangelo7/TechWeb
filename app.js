@@ -48,6 +48,9 @@ app.use((req , res, next)=>{
 app.use(passport.initialize());
 app.use(passport.session()); // Al login apro una sessione
 
+// Dove trovare i file statici di index
+app.use(express.static('views/img')); 
+
 // ROUTE PER PAGINA INDEX.HTML
 app.get('/', (req, res)=>{
     res.render('index');
@@ -55,7 +58,7 @@ app.get('/', (req, res)=>{
 
 /// ROUTE PER PAGINA MAPPA.HTML
 app.get('/mappa', accessoSicuro, (req, res)=>{
-    res.sendFile('mappa.html', {root: __dirname + '/public'});
+    res.sendFile('mappa.html', {root: __dirname + '/views'});
 });
 
 //GESTIONE DEI POST DI MAPPA.THYML
@@ -129,19 +132,6 @@ app.post("/registrazione", (req, res)=>{
     }
 });
 
-// app.post('/login', function(req,res) {
-//     var db = dbconn.get();
-//     var collection = db.collection("utenti");
-//     collection.findOne({ email: req.body.email, password: req.body.password}, function(err, user) {
-//         if(!user){
-//             req.flash('msg_errore', 'Email o password incorrette, riprova');
-//             res.redirect("/login");
-//         } else if (user.email === req.body.email && user.password === req.body.password){
-//             res.redirect("/mappa");
-//         } 
-//     });
-// });
-
 // GESTIONE  LOGIN
 app.post('/login', (req, res, next)=>{
     passport.authenticate('local', {
@@ -160,7 +150,8 @@ app.get('/logout', (req, res)=>{
     res.redirect('/');
 });
 
-// DOVE CERCARE I FILE STATICI DA RENDERIZZARE
+// DOVE CERCARE I FILE STATICI AD ACCESSO SICURO DA RENDERIZZARE
+// Va dopo la route di login perché reindirizza a login
 app.use( [ accessoSicuro, express.static( __dirname + "/public" ) ] );
 
 var port = 8000
