@@ -28,3 +28,7 @@ img {
     background: transparent;
 }
 
+#alert-su-mappa {
+    z-index: 1;
+}
+

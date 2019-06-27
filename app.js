@@ -146,7 +146,6 @@ app.get('/logout', (req, res)=>{
     // Passport function
     // Invoking logout() will remove the req.user property and clear the login session (if any).
     req.logout();
-    req.flash('msg_successo', "Sei disconesso. Ciao, alla prossima sessione");
     res.redirect('/');
 });
 
