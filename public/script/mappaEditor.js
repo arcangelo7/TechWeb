@@ -38,7 +38,6 @@ function onLocationFound(e) {
                                 <button id='registratore' class='btn btn-primary'>Crea</button>
                                 <button id='registratore-no-autorizzazione' class='btn btn-primary' hidden>Crea</button>
                                 <button id='stop' class='btn btn-primary' hidden>Stop</button>
-                                <audio class='mt-4' controls id='audio' hidden></audio>
                         </div>`
 
     // Il popup non si chiude mai
@@ -99,7 +98,6 @@ function manipolaPopupRegistrazione(){
   {
     document.getElementById("stop").hidden = true;
     document.getElementById("registratore-no-autorizzazione").hidden = false;
-    document.getElementById("audio").hidden = false;
     $("#microfono").css("color", "black");
     $("#popupText").text("Clicca per creare una clip");
     $('#new-clip-form-modal').modal();
