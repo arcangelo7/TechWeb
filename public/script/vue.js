@@ -46,7 +46,7 @@ new Vue({
 				var clipObj = { titolo: tit, testo: text, metadati: this.stringa_metadati, audio: b64 };
 				var clipJSON = JSON.stringify(clipObj);
 				$.ajax({
-					url: 'http://localhost:8000/mappa',  //url: 'https://site181918.tw.cs.unibo.it/mappa',
+					url: 'http://localhost:8000/editor-mappa',  //url: 'https://site181918.tw.cs.unibo.it/editor-mappa',
             				type: 'POST',
             				contentType: 'application/json',
             				data: clipJSON
