@@ -58,7 +58,7 @@ app.get('/', (req, res)=>{
 
 /// ROUTE PER PAGINA MAPPA.HTML
 app.get('/editor-mappa', accessoSicuro, (req, res)=>{
-    res.render('mappaEditor');
+    res.sendFile('mappaEditor.html', {root: __dirname + "/views"});
 });
 
 //GESTIONE DEI POST DI MAPPA.THYML
@@ -66,9 +66,9 @@ app.post('/editor-mappa',function(req, res) {
 	if(req.body.audio != undefined)
 	{
 		var db = dbconn.get();
-        	var collection = db.collection('clip');
+        var collection = db.collection('clip');
 		collection.insertOne(req.body, function(err, result) {
-			if(err) res.send("Errore: impossibile inserire clip all'interno del database"); //da controllare(da cambiare con flash magari)
+            if(err) res.send("Errore: impossibile inserire clip all'interno del database"); //da controllare(da cambiare con flash magari)
 		});
 	}
 	res.redirect('/editor-mappa');
@@ -78,10 +78,10 @@ app.post('/editor-mappa',function(req, res) {
 app.get('/result',function(req,res){
 	var db = dbconn.get();
         var collection = db.collection('clip');
-	collection.find({}).toArray(function(err, result) {
+	    collection.find({}).toArray(function(err, result) {
     		if (err) res.send("Errore: impossibile trovare le clip"); //da controllare(da cambiare con flash magari)
     		res.send(JSON.stringify(result));
-	});
+	    });
 });
 
 //ROUTE PER PAGINA REGISTRAZIONE

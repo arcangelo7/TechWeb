@@ -67,8 +67,15 @@ map.on('popupopen', function() {
                 mediaRecorder.onstop = (ev)=>{
                     let blob = new Blob(chunks, { 'type' : 'audio/mp3;' });
                     chunks = [];
-                    audioURL = window.URL.createObjectURL(blob);
+                    let audioURL = window.URL.createObjectURL(blob);
                     audSave.src = audioURL;
+
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        b64 = reader.result.replace(/^data:.+;base64,/, '');
+                        console.log(b64);
+                    };
+                    reader.readAsDataURL(blob);
                 }
             }
         

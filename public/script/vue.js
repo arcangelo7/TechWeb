@@ -43,8 +43,7 @@ new Vue({
 				var idet = detail_significato.indexOf(this.detail_selected)
 				this.stringa_metadati = geo + ":" + pur + ":" + language_sigla[ilan] + ":" + content_sigla[icon] + ":A" + audience_sigla[iaud] + ":P" + detail_numero[idet]
 				$('#new-clip-form-modal').modal('hide');
-
-				var clipObj = { titolo: tit, testo: text, metadati: this.stringa_metadati, audio: audioURL };
+				var clipObj = { titolo: tit, testo: text, metadati: this.stringa_metadati, audio: b64 };
 				var clipJSON = JSON.stringify(clipObj);
 				$.ajax({
 					url: 'http://localhost:8000/mappa',  //url: 'https://site181918.tw.cs.unibo.it/mappa',
