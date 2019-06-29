@@ -112,24 +112,45 @@ app.post("/registrazione", (req, res)=>{
             password: req.body.password,
             conferma_psw: req.body.conferma_psw
         });
-    } else {
-        var db = dbconn.get();
-        var collection = db.collection("utenti");
-        const nuovoUtente = {
-            nome: req.body.nome,
-            cognome: req.body.cognome,
-            email: req.body.email,
-            password: req.body.password
-        }
-        collection.insertOne(nuovoUtente, (err, result)=>{
-            if(err) {
-                console.log("Errore, impossibile inserire utente nel database: " + err);
-            } else {
-                req.flash('msg_successo', 'Bene, ti sei registrato');
-                res.redirect("/login");
-            }
-        });       
+    } 
+    function controllaUtente() 
+    {
+        return new Promise(function(resolve)
+        {
+            var db = dbconn.get();
+            var collection = db.collection('utenti');
+            collection.find({email : req.body.email}).toArray(function(err, result) {
+                resolve(JSON.stringify(result));
+            });
+        });
     }
+    controllaUtente().then(function(value) {
+        if(value != '[]')
+        {
+            errori.push({text: 'Mail già registrata'});
+        }
+        if(errori.length > 0){
+            res.render('registrazione', {
+                errori: errori,
+                nome: req.body.nome,
+                cognome: req.body.cognome,
+                email: req.body.email,
+                password: req.body.password,
+                conferma_psw: req.body.conferma_psw
+            });
+        }
+        else
+        {
+            collection.insertOne(nuovoUtente, (err, result)=>{
+                if(err) {
+                    console.log("Errore, impossibile inserire utente nel database: " + err);
+                } else {
+                    req.flash('msg_successo', 'Bene, ti sei registrato');
+                    res.redirect("/login");
+                }
+            });
+        }
+    });   
 });
 
 // GESTIONE  LOGIN
