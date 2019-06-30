@@ -41,25 +41,21 @@ map.on('popupopen', function() {
                 //add listeners for saving video/audio
                 start = document.getElementById('registratore-no-autorizzazione');
                 let stop = document.getElementById('stop');
-                let audSave = document.getElementById('audio');
                 let mediaRecorder = new MediaRecorder(mediaStreamObj);
                 let chunks = [];
 
                 while(navigator.mediadevices = true){
                 mediaRecorder.start();
                 console.log(mediaRecorder.state);
-                document.getElementById("audio").hidden=true;
                 
                 start.addEventListener('click', (ev)=>{
                     mediaRecorder.start();
                     console.log(mediaRecorder.state);
-                    document.getElementById("audio").hidden=true;
                 });
 
                 stop.addEventListener('click', (ev)=>{
                     mediaRecorder.stop();
                     console.log(mediaRecorder.state);
-                    document.getElementById("audio").hidden=false;
                 });
                 mediaRecorder.ondataavailable = function(ev) {
                     chunks.push(ev.data);
@@ -68,8 +64,6 @@ map.on('popupopen', function() {
                     let blob = new Blob(chunks, { 'type' : 'audio/mp3;' });
                     chunks = [];
                     let audioURL = window.URL.createObjectURL(blob);
-                    audSave.src = audioURL;
-
                     var reader = new FileReader();
                     reader.onload = function () {
                         b64 = reader.result.replace(/^data:.+;base64,/, '');

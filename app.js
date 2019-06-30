@@ -81,7 +81,6 @@ app.get('/lista-clip', accessoSicuro, function(req,res){
     collection
         .find()
         .toArray(function(err, result) {
-            console.log(result);
             if (err) {console.log("Errore: impossibile connettersi al db")};   
             res.render('listaClip', { 
                 clip: result
