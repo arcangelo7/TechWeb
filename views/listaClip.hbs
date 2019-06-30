@@ -1,0 +1,24 @@
+<div class="container">
+    <h2 class="my-5">Le tue clip</h2>    
+    {{#each clip}}      
+    <table class="table table-hover">
+      <thead>
+        <th style="width: 100%">Titolo</th>
+        <th>Clip</th>                      
+      </thead>
+      <tbody id="table">
+          <tr>
+            <td>{{this.titolo}}</td>
+            <td><audio controls src="data:audio/ogg;base64,{{this.audio}}"/></td>
+          </tr>
+      </tbody>
+    </table>
+    {{else}}
+    <div class="alert alert-warning">Non c'è nessuna clip</div>
+    {{/each}}
+</div>
+
+<script>
+  $("a[href='/editor']").addClass("active");
+  $("a[href='/lista-clip']").addClass("active");
+</script>

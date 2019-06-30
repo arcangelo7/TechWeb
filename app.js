@@ -61,27 +61,32 @@ app.get('/editor-mappa', accessoSicuro, (req, res)=>{
     res.sendFile('mappaEditor.html', {root: __dirname + "/views"});
 });
 
-//GESTIONE DEI POST DI MAPPA.THYML
+//GESTIONE DEI POST DI MAPPA.HTML
 app.post('/editor-mappa',function(req, res) {
 	if(req.body.audio != undefined)
 	{
 		var db = dbconn.get();
         var collection = db.collection('clip');
 		collection.insertOne(req.body, function(err, result) {
-            if(err) res.send("Errore: impossibile inserire clip all'interno del database"); //da controllare(da cambiare con flash magari)
+            if(err) console.log("Errore: impossibile inserire clip all'interno del database"); 
 		});
 	}
 	res.redirect('/editor-mappa');
 });
 
-//ROUTE DELLA PAGINA CHE MOSTRA LE CLIP(TEMPORANEA)
-app.get('/result',function(req,res){
-	var db = dbconn.get();
-        var collection = db.collection('clip');
-	    collection.find({}).toArray(function(err, result) {
-    		if (err) res.send("Errore: impossibile trovare le clip"); //da controllare(da cambiare con flash magari)
-    		res.send(JSON.stringify(result));
-	    });
+//ROUTE DELLA PAGINA CHE MOSTRA LE CLIP
+app.get('/lista-clip', accessoSicuro, function(req,res){
+    var db = dbconn.get();
+    var collection = db.collection('clip');
+    collection
+        .find()
+        .toArray(function(err, result) {
+            console.log(result);
+            if (err) {console.log("Errore: impossibile connettersi al db")};   
+            res.render('listaClip', { 
+                clip: result
+            });
+    });
 });
 
 //ROUTE PER PAGINA REGISTRAZIONE
