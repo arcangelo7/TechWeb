@@ -119,6 +119,5 @@ map.on('popupopen', function() {
                         info.addTo(map);
                 }
             });
-
         });
 });

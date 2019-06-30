@@ -71,7 +71,7 @@ app.post('/editor-mappa',function(req, res) {
             if(err) console.log("Errore: impossibile inserire clip all'interno del database"); 
 		});
 	}
-	res.redirect('/editor-mappa');
+	res.redirect('/lista-clip');
 });
 
 //ROUTE DELLA PAGINA CHE MOSTRA LE CLIP
