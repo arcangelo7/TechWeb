@@ -1,4 +1,5 @@
 const express = require('express');
+var mongodb = require('mongodb');
 require("./config/dbconnection.js").open();
 var dbconn = require("./config/dbconnection.js");
 const bodyParser = require('body-parser');
@@ -23,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-
 app.use(bodyParser.json()); // parse application/json
 
 // OVERRIDE MIDDLEWARE
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
 
 // MIDDLEWARE PER HANDLEBARS
 app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));
@@ -96,10 +97,11 @@ app.get('/lista-clip', accessoSicuro, function(req,res){
 app.delete('/lista-clip/:id', accessoSicuro, (req , res) =>{
     var db = dbconn.get();
     var collection = db.collection('clip');
-    collection.remove({
-        _id: req.params.id        
+    collection.deleteOne({
+        "_id": new mongodb.ObjectID(req.params.id)        
     })
     .then(() =>{
+        console.log(req.params.id)
         req.flash('msg_successo',  'Nota cancellata correttamente');
         res.redirect('/lista-clip');
     });
