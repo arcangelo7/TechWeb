@@ -6,6 +6,12 @@
           <h4 class="card-title">{{this.titolo}}</h4>
           <br>
           <audio style="width: 100%" controls src="data:audio/ogg;base64,{{this.audio}}"/></audio>
+
+          <!-- Cancella nota per id -->
+          <form action="/lista-clip/{{this.id}}?_method=DELETE" method="post">
+          <input type="hidden" name="_method" value="DELETE">
+          <input type="submit" class="btn btn-danger btn-block" value="Cancella">
+
         </div>
       </div>
       <br>           

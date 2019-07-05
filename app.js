@@ -2,6 +2,7 @@ const express = require('express');
 require("./config/dbconnection.js").open();
 var dbconn = require("./config/dbconnection.js");
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override')
 const exphbs  = require('express-handlebars');
 const path = require('path');
 const flash= require('connect-flash');
@@ -20,6 +21,9 @@ app.use(express.static( __dirname + "/public" ));
 // MIDDLEWARE BODY PARSER
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
+
+// OVERRIDE MIDDLEWARE
+app.use(methodOverride('_method'))
 
 // MIDDLEWARE PER HANDLEBARS
 app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));
@@ -85,6 +89,19 @@ app.get('/lista-clip', accessoSicuro, function(req,res){
             res.render('listaClip', { 
                 clip: result
             });
+    });
+});
+
+//GESTIONE PER ELIMINAZIONE CLIP
+app.delete('/lista-clip/:id', accessoSicuro, (req , res) =>{
+    var db = dbconn.get();
+    var collection = db.collection('clip');
+    collection.remove({
+        _id: req.params.id        
+    })
+    .then(() =>{
+        req.flash('msg_successo',  'Nota cancellata correttamente');
+        res.redirect('/lista-clip');
     });
 });
 
