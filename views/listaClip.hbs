@@ -13,6 +13,12 @@
             <input type="submit" class="btn btn-danger btn-block" value="Cancella">
           </form>
 
+          <!-- Carica su Youtube -->
+          <form action='/lista-clip/{{this.titolo}}?_method=POST' method="post" class="my-2">
+            <input type="hidden" name="_method" value="POST">
+            <input type="submit" class="btn btn-success btn-block" value="Carica">
+          </form>
+
         </div>
       </div>
       <br>           

@@ -9,6 +9,7 @@ const path = require('path');
 const flash= require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+const ffmpeg = require('fluent-ffmpeg');
 
 var app = express();
 
@@ -93,7 +94,7 @@ app.get('/lista-clip', accessoSicuro, function(req,res){
     });
 });
 
-//GESTIONE PER ELIMINAZIONE CLIP
+//GESTIONE ELIMINAZIONE CLIP
 app.delete('/lista-clip/:id', accessoSicuro, (req , res) =>{
     var db = dbconn.get();
     var collection = db.collection('clip');
@@ -104,6 +105,27 @@ app.delete('/lista-clip/:id', accessoSicuro, (req , res) =>{
         console.log(req.params.id)
         req.flash('msg_successo',  'Nota cancellata correttamente');
         res.redirect('/lista-clip');
+    });
+});
+
+//GESTIONE CARICAMENTO CLIP SU YOUTUBE
+app.post('/lista-clip/:id', accessoSicuro, (req , res) =>{
+    function trovaclip()
+    {
+        return new Promise(function(resolve)
+        {
+            var db = dbconn.get();
+            var collection = db.collection('clip');
+            collection.findOne({"_id": new mongodb.ObjectID(req.params.id)}, function(err, result) {
+                resolve(result);
+            })
+        });
+    }
+    trovaclip().then(function(value) {
+        const audio = 'data:audio/mp3;base64,' + value.audio;
+        var video;
+        ffmpeg(audio)
+        .save("output.mp4");
     });
 });
 
