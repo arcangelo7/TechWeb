@@ -19,7 +19,6 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 map.locate({enableHighAccuracy: true});
 
 function onLocationFound(e) {
-    console.log(e.latlng)
     var popupContent = `<div class='text-center'>
                                 <h3>Tu sei qui</h3>
                                 <p class='lead'>Scrolla verso il basso per cercare locazioni</p>
@@ -66,7 +65,10 @@ $("a[href='/']").addClass("active");
 
 // Search box
 var geocoder = L.Control.geocoder({
-    defaultMarkGeocode: false
+    defaultMarkGeocode: false,
+    collapsed: false,
+    placeholder: "Cerca...",
+    errorMessage: "Non ho trovato nulla... Riprova"
 })
   .on('markgeocode', function(e) {
         circle.setLatLng(e.geocode.center);
@@ -74,3 +76,61 @@ var geocoder = L.Control.geocoder({
         map.setView(e.geocode.center, 18); 
   })
   .addTo(map);
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiYXJjYW5nZWxvNyIsImEiOiJjandnbTA1cGQxOTdkNGFvM2E0MXNtenhyIn0.3KYZtLTolcDAj7zagvi2sQ';
+
+// move the attribution control out of the way
+map.attributionControl.setPosition('bottomleft');
+
+// create the initial directions object, from which the layer
+// and inputs will pull data.
+var directions = L.mapbox.directions();
+
+var directionsLayer = L.mapbox.directions.layer(directions)
+    .addTo(map);
+
+var directionsInputControl = L.mapbox.directions.inputControl('inputs', directions)
+    .addTo(map);
+
+var directionsErrorsControl = L.mapbox.directions.errorsControl('errors', directions)
+    .addTo(map);
+
+var directionsRoutesControl = L.mapbox.directions.routesControl('routes', directions)
+    .addTo(map);
+
+var directionsInstructionsControl = L.mapbox.directions.instructionsControl('instructions', directions)
+    .addTo(map);
+
+// Creo un box per mostrare cose sulla mappa
+var info = L.control({position: "bottomleft"});
+// Should return the container DOM element for the control and add listeners on relevant map events. Called on control.addTo(map).
+info.onAdd = function () {
+    this._div = L.DomUtil.create('div', 'indicazioni'); // create a div with a class "indicazioni"
+    L.DomEvent.disableClickPropagation(this._div);
+    this.update();
+    return this._div;
+};
+info.update = function () {
+    this._div.innerHTML = '<button class="btn btn-success"><i class="fas fa-directions fa-2x"></i></button>';
+    };  
+info.addTo(map);
+
+function toggleDirectionsButton() {
+    if($(".indicazioni").html() == '<button class="btn btn-success"><i class="fas fa-directions fa-2x" aria-hidden="true"></i></button>') {
+        $(".indicazioni").html('<button class="btn btn-danger"><i class="fas fa-directions fa-2x"></i></button>');
+    } else {
+        $(".indicazioni").html('<button class="btn btn-success"><i class="fas fa-directions fa-2x" aria-hidden="true"></i></button>');
+    }
+}
+
+$(".indicazioni").click(function(){
+    $("#inputs, #errors, #directions").toggle("slow");
+    toggleDirectionsButton();
+});
+
+map.on("click", function(){
+    $("#inputs, #errors, #directions").show(500);
+    $(".indicazioni").html('<button class="btn btn-danger"><i class="fas fa-directions fa-2x"></i></button>')
+});
+
+
