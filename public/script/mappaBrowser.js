@@ -1,5 +1,8 @@
 // initialize the map to show the Europe
 var map = L.map('mappa').setView([41,12], 5);
+var circle;
+var marker;
+var popup;
 
 // add a Mapbox Streets tile layer
     // set the URL template for the tile images
@@ -16,6 +19,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 map.locate({enableHighAccuracy: true});
 
 function onLocationFound(e) {
+    console.log(e.latlng)
     var popupContent = `<div class='text-center'>
                                 <h3>Tu sei qui</h3>
                                 <p class='lead'>Scrolla verso il basso per cercare locazioni</p>
@@ -32,13 +36,13 @@ function onLocationFound(e) {
         draggable: true
     }
     // Aggiungo un marker con un popup
-    var marker = new L.Marker(e.latlng, markerOptions);
+    marker = new L.Marker(e.latlng, markerOptions);
     popup = new L.popup()
         .setLatLng(e.latlng)
         .setContent(popupContent);
     marker.addTo(map).bindPopup(popup, popupOptions).openPopup();
     // Disegna un cerchio intorno al marker con un raggio di 100 metri
-    var circle = L.circle(e.latlng, 100).addTo(map);
+    circle = L.circle(e.latlng, 100).addTo(map);
     // Il marker è draggable con posizione aggiornata
     // Il popup e il circle aggiornano la loro posizione
     marker.on('dragend', function(e) { 
@@ -59,3 +63,14 @@ function onLocationError(e) {
 map.on('locationerror', onLocationError);
 
 $("a[href='/']").addClass("active");
+
+// Search box
+var geocoder = L.Control.geocoder({
+    defaultMarkGeocode: false
+})
+  .on('markgeocode', function(e) {
+        circle.setLatLng(e.geocode.center);
+        marker.setLatLng(e.geocode.center).openPopup();
+        map.setView(e.geocode.center, 18); 
+  })
+  .addTo(map);
