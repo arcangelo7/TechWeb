@@ -1,8 +1,8 @@
 // initialize the map to show the Europe
 var map = L.map('mappa').setView([41,12], 5);
-var circle;
-var marker;
-var popup;
+var circle = new L.circle;
+var marker = new L.Marker;
+var popup = new L.popup;
 
 // add a Mapbox Streets tile layer
     // set the URL template for the tile images
@@ -18,22 +18,31 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 // Geolocation
 map.locate({enableHighAccuracy: true});
 
+var popupContent = `<div class='text-center'>
+                            <h3>Tu sei qui</h3>
+                            <p class='lead'>Scrolla verso il basso per cercare locazioni</p>
+                    </div>`
+// Il popup non si chiude mai
+var popupOptions = {
+    closeButton: false,
+    closeOnEscapeKey: false,
+    closeOnClick: false
+}
+// Testo alternativo per l'accessibilità e possibilità di aggiustare la posizione del marker
+var markerOptions = {
+    alt: "Marker posizionato sulla tua posizione",
+    draggable: true
+}
+
+function getPositionOnDragend() {
+    marker.on('dragend', function() { 
+        var position = marker.getLatLng();
+        circle.setLatLng(position);
+        marker.setLatLng(position).openPopup();
+    });      
+}
+
 function onLocationFound(e) {
-    var popupContent = `<div class='text-center'>
-                                <h3>Tu sei qui</h3>
-                                <p class='lead'>Scrolla verso il basso per cercare locazioni</p>
-                        </div>`
-    // Il popup non si chiude mai
-    var popupOptions = {
-        closeButton: false,
-        closeOnEscapeKey: false,
-        closeOnClick: false
-    }
-    // Testo alternativo per l'accessibilità e possibilità di aggiustare la posizione del marker
-    var markerOptions = {
-        alt: "Marker posizionato sulla tua posizione",
-        draggable: true
-    }
     // Aggiungo un marker con un popup
     marker = new L.Marker(e.latlng, markerOptions);
     popup = new L.popup()
@@ -44,11 +53,7 @@ function onLocationFound(e) {
     circle = L.circle(e.latlng, 100).addTo(map);
     // Il marker è draggable con posizione aggiornata
     // Il popup e il circle aggiornano la loro posizione
-    marker.on('dragend', function(e) { 
-        var position = marker.getLatLng();
-        circle.setLatLng(position);
-        marker.setLatLng(position).openPopup();
-    });  
+    getPositionOnDragend();
     // center the map on the right coordinates and zoom
     map.setView(e.latlng, 18); 
 }
@@ -61,6 +66,7 @@ function onLocationError(e) {
 
 map.on('locationerror', onLocationError);
 
+// Add sctive class on proper navbar link
 $("a[href='/']").addClass("active");
 
 // Search box
@@ -71,9 +77,18 @@ var geocoder = L.Control.geocoder({
     errorMessage: "Non ho trovato nulla... Riprova"
 })
   .on('markgeocode', function(e) {
-        circle.setLatLng(e.geocode.center);
-        marker.setLatLng(e.geocode.center).openPopup();
-        map.setView(e.geocode.center, 18); 
+    if (marker !== null || circle !== null) {
+        map.removeLayer(marker);
+        map.removeLayer(circle);
+    }
+    marker = new L.Marker(e.geocode.center, markerOptions);
+    popup = new L.popup()
+        .setLatLng(e.geocode.center)
+        .setContent(popupContent);
+    marker.addTo(map).bindPopup(popup, popupOptions).openPopup();
+    circle = L.circle(e.geocode.center, 100).addTo(map);
+    getPositionOnDragend();
+    map.setView(e.geocode.center, 18); 
   })
   .addTo(map);
 
@@ -102,7 +117,7 @@ var directionsInstructionsControl = L.mapbox.directions.instructionsControl('ins
     .addTo(map);
 
 // Creo un box per mostrare cose sulla mappa
-var info = L.control({position: "bottomleft"});
+var info = L.control({position: "topleft"});
 // Should return the container DOM element for the control and add listeners on relevant map events. Called on control.addTo(map).
 info.onAdd = function () {
     this._div = L.DomUtil.create('div', 'indicazioni'); // create a div with a class "indicazioni"
@@ -111,15 +126,15 @@ info.onAdd = function () {
     return this._div;
 };
 info.update = function () {
-    this._div.innerHTML = '<button class="btn btn-success"><i class="fas fa-directions fa-2x"></i></button>';
+    this._div.innerHTML = '<button class="btn btn-success"><i class="fas fa-directions"></i></button>';
     };  
 info.addTo(map);
 
 function toggleDirectionsButton() {
-    if($(".indicazioni").html() == '<button class="btn btn-success"><i class="fas fa-directions fa-2x" aria-hidden="true"></i></button>') {
-        $(".indicazioni").html('<button class="btn btn-danger"><i class="fas fa-directions fa-2x"></i></button>');
+    if($(".indicazioni").html() == '<button class="btn btn-success"><i class="fas fa-directions" aria-hidden="true"></i></button>') {
+        $(".indicazioni").html('<button class="btn btn-danger"><i class="fas fa-directions"></i></button>');
     } else {
-        $(".indicazioni").html('<button class="btn btn-success"><i class="fas fa-directions fa-2x" aria-hidden="true"></i></button>');
+        $(".indicazioni").html('<button class="btn btn-success"><i class="fas fa-directions" aria-hidden="true"></i></button>');
     }
 }
 
@@ -130,7 +145,7 @@ $(".indicazioni").click(function(){
 
 map.on("click", function(){
     $("#inputs, #errors, #directions").show(500);
-    $(".indicazioni").html('<button class="btn btn-danger"><i class="fas fa-directions fa-2x"></i></button>')
+    $(".indicazioni").html('<button class="btn btn-danger"><i class="fas fa-directions"></i></button>')
 });
 
 

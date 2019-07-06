@@ -44,7 +44,7 @@ img {
 
 #inputs {
     z-index: 10;
-    top: 10em;
+    top: 12em;
     left: 10px;
 }
 
@@ -66,5 +66,31 @@ img {
     top: 90px;
     left: 10px;
 }
+
+@media screen and (max-width: 576px) {
+    .indicazioni {
+        visibility: hidden;
+    }
+    #inputs, #errors, #directions {
+        visibility: hidden;
+    }
+    .leaflet-control-geocoder-form input {
+        width: 50vw;
+    }
+}
+
+@media screen and (max-width: 756px) {
+    #inputs {
+    top: 12em;
+    bottom: 0;  
+    right: 0;
+  }
+  #directions {
+    top: 0;
+    bottom: 0;  
+    right: 0;
+  }
+}
+
 
 
