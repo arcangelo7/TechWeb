@@ -16,24 +16,12 @@
           <!-- Carica su Youtube -->
           <form action='/lista-clip/{{this._id}}?_method=POST' method="post" class="my-2">
             <input type="hidden" name="_method" value="POST">
-            <input type="submit" class="btn btn-success btn-block" value="Carica">
+            <input type="submit" onclick="handleAuthClick()" class="btn btn-success btn-block" value="Carica">
           </form>
 
         </div>
       </div>
       <br>           
-    {{!-- <table class="table table-hover">
-      <thead>
-        <th style="width: 100%">Titolo</th>
-        <th>Clip</th>                      
-      </thead>
-      <tbody id="table">
-          <tr>
-            <td>{{this.titolo}}</td>
-            <td><audio controls src="data:audio/ogg;base64,{{this.audio}}"/></td>
-          </tr>
-      </tbody>
-    </table> --}}
     {{else}}
     <div class="alert alert-warning">Non c'è nessuna clip</div>
     {{/each}}
@@ -43,3 +31,4 @@
   $("a[href='/editor']").addClass("active");
   $("a[href='/lista-clip']").addClass("active");
 </script>
+<script src="script/listaClip.js"></script>
