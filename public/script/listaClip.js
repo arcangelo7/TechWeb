@@ -28,6 +28,10 @@ function handleSignoutClick() {
     gapi.auth2.getAuthInstance().signOut();
 }
 
+$(document).ready(function() {
+    handleClientLoad();
+});
+
 // function uploadVideo(file, metadata, callback) {
 //     // Get access token
 //     var auth = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
@@ -70,3 +74,7 @@ function handleSignoutClick() {
 //         });
 //     } 
 // }
+
+$("a[href='/editor']").addClass("active");
+$("a[href='/lista-clip']").addClass("active");
+
