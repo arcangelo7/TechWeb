@@ -25,6 +25,110 @@
     {{else}}
     <div class="alert alert-warning">Non c'è nessuna clip</div>
     {{/each}}
+
+    <input type="hidden" id="videoToUpload" value="{{videoToUpload}}">
 </div>
 
-<script src="script/listaClip.js"></script>
+<script>
+  /* GAPI integration (oauth2) */
+  // Options
+  const CLIENT_ID =
+  '807601852112-7omdcouallpk4115i6fueefg4mvnlgll.apps.googleusercontent.com';
+  //'1096380917447-8ndu9h398nlfbe38s18ufn1gd9mt2r4u.apps.googleusercontent.com';
+  //'723989183881-3jg3po1j4t028fi04n7ihdt4i4mng2fs.apps.googleusercontent.com';
+  //'371023340985-hndpejeqbqf8jnqo6k1las37v6caoo0o.apps.googleusercontent.com';
+
+  const DISCOVERY_DOCS = [
+    'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'
+  ];
+  const SCOPES = 'https://www.googleapis.com/auth/youtube';
+
+  function handleClientLoad() {
+      gapi.load('client:auth2', initClient)  
+  }
+  function initClient(callback) {
+  gapi.client
+    .init({
+      discoveryDocs: DISCOVERY_DOCS,
+      clientId: CLIENT_ID,
+      scope: SCOPES
+    })
+    .then(() => {
+      // Listen for sign in state changes
+      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+      // Handle initial sign in state
+      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    })
+    .catch(err => console.log(JSON.stringify(err)));
+    }
+
+  // Handle login
+  function handleAuthClick() {
+      gapi.auth2.getAuthInstance().signIn();
+  }
+
+  // Handle logout
+  function handleSignoutClick() {
+      gapi.auth2.getAuthInstance().signOut();
+  }
+
+  $(document).ready(function() {
+      handleClientLoad();
+  });
+
+  function uploadVideo(file, metadata, callback) {
+    // Get access token
+    var auth = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+
+    // Setup request
+    var form = new FormData();
+    // In order to get the correct content type we need to set a blob field
+    var metadata = new Blob([JSON.stringify(metadata)], {type: 'application/json'});
+        form.append('video', metadata);
+        form.append('mediaBody', file);
+        $.ajax({
+          url: 'https://www.googleapis.com/upload/youtube/v3/videos?access_token='
+            + encodeURIComponent(auth) + '&part=snippet,status',
+            data: form,
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            success: (data) => callback(data)
+        });
+    }
+
+    function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+          console.log("Sono loggato")
+            if(document.getElementById("videoToUpload").value.length > 0){
+              console.log("Cloudinary ha mandato la risorsa");
+              var video = document.getElementById('videoToUpload').value;
+              var metadata = {
+                  kind: 'youtube#video',
+                  snippet: {
+                  title: "prova",
+                  description: "questa è una prova"
+                  },
+                  status: {
+                  privacyStatus: 'public',
+                  embeddable: true
+                  }
+              };
+              fetch(video)
+                .then(res => res.blob())
+                .then(blob =>{
+                  uploadVideo(blob, metadata, function(data) {
+                      alert("Grazie per il tuo contributo!");
+                      // location.reload();
+                  })
+                });
+          }
+        } 
+    }
+
+
+
+  $("a[href='/editor']").addClass("active");
+  $("a[href='/lista-clip']").addClass("active");
+</script>
