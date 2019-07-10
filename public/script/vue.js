@@ -13,46 +13,20 @@ new Vue({
 		return {
 			visualizza: true,
 			purpose_opzioni: purpose_array,
-			purpose_picked: purpose_array[0],
 			language_opzioni: language_nome,
-			language_selected: language_nome[0],
+			language_sigla: language_sigla,
 			content_opzioni: content_nome,
-			content_selected: content_nome[0],
+			content_sigla: content_sigla,
 			audience_opzioni: audience_nome,
-			audience_selected: audience_nome[0],
+			audience_sigla: audience_sigla,
 			detail_opzioni: detail_significato,
-			detail_selected: detail_significato[0],
+			detail_numero: detail_numero,
 			titolo: '',
 			testo: '',
 			stringa_metadati: '',
 		}
 	},
 	methods: {
-		insert : function(){
-			var tit = document.getElementById("titolo").value;
-			var text = document.getElementById("testo").value;
-			if(tit != '' && text != '')
-			{
-				this.titolo = tit
-				this.testo = text
-				var geo = OpenLocationCode.encode(coordinate.lat, coordinate.lng);
-				var pur = this.purpose_picked;
-				var ilan = language_nome.indexOf(this.language_selected)
-				var icon = content_nome.indexOf(this.content_selected)
-				var iaud = audience_nome.indexOf(this.audience_selected)
-				var idet = detail_significato.indexOf(this.detail_selected)
-				this.stringa_metadati = geo + ":" + pur + ":" + language_sigla[ilan] + ":" + content_sigla[icon] + ":A" + audience_sigla[iaud] + ":P" + detail_numero[idet]
-				$('#new-clip-form-modal').modal('hide');
-				var clipObj = { titolo: tit, testo: text, metadati: this.stringa_metadati, audio: b64 };
-				var clipJSON = JSON.stringify(clipObj);
-				$.ajax({
-					url: 'http://localhost:8000/editor-mappa',  //url: 'https://site181918.tw.cs.unibo.it/editor-mappa',
-            				type: 'POST',
-            				contentType: 'application/json',
-            				data: clipJSON
-        			});
-			}
-		},
 		translate : function(){
 			if(this.stringa_metadati == '')
 			{

@@ -69,24 +69,18 @@ app.get('/editor-mappa', accessoSicuro, (req, res)=>{
 
 //GESTIONE DEI POST DI EDITOR MAPPA
 app.post('/editor-mappa',function(req, res) {
-    console.log(req.body);
-    function aggiungiClip() {
-        return new Promise (function(resolve, reject)
-        {
-            if(req.body.audio != undefined){
-                var db = dbconn.get();
-                var collection = db.collection('clip');
-                collection.insertOne(req.body, function(err, result) {
-                    if(err) console.log("Errore: impossibile inserire clip all'interno del database");
-                });
-            }
-            resolve('Ho caricato la clip');
-            reject('Non ho caricato la clip'); 
-        })
+    var db = dbconn.get();
+    var collection = db.collection('clip');
+    const nuovaClip = {
+        titolo: req.body.titolo,
+        testo: req.body.testo,
+        metadati: req.body.olc + ":" + req.body.scopo + ":" + req.body.lingua + ":" + req.body.categoria + ":" + req.body.audience + ":" + req.body.dettaglio,
+        audio: req.body.audio
     }
-    aggiungiClip().then(function(){
-        res.redirect('/lista-clip');
+    collection.insertOne(nuovaClip, function(err, result) {
+        if(err) console.log("Errore: impossibile inserire clip all'interno del database");
     });
+    res.redirect("/lista-clip");
 });
 
 //ROUTE DELLA PAGINA CHE MOSTRA LE CLIP

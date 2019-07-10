@@ -67,6 +67,7 @@ map.on('popupopen', function() {
                     var reader = new FileReader();
                     reader.onload = function () {
                         b64 = reader.result.replace(/^data:.+;base64,/, '');
+                        document.getElementById("audio").value = b64;
                         console.log(b64);
                     };
                     reader.readAsDataURL(blob);

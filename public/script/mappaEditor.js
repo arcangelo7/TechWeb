@@ -70,6 +70,7 @@ function onLocationFound(e) {
     map.setView(e.latlng, 18);
     
     coordinate = marker.getLatLng();
+    document.getElementById('olc').value = OpenLocationCode.encode(coordinate.lat, coordinate.lng);
 }
 
 map.on('locationfound', onLocationFound);
@@ -78,7 +79,7 @@ map.on('locationfound', onLocationFound);
 function onLocationError(e) {
     info.update = function () {
         this._div.innerHTML = '<p>Errore: Impossibile geolocalizzare</p>';
-    };  
+    }
     info.addTo(map);
 }
 

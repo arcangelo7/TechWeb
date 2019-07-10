@@ -5,7 +5,7 @@
         <div class="card-body">
           <h4 class="card-title">{{this.titolo}}</h4>
           <br>
-          <audio style="width: 100%" controls src="data:audio/ogg;base64,{{this.audio}}"/></audio>
+          <audio style="width: 100%" controls src="data:audio/*;base64,{{this.audio}}"/></audio>
 
           <!-- Cancella nota per titolo -->
           <form action='/lista-clip/{{this._id}}?_method=DELETE' method="post" class="my-2">
