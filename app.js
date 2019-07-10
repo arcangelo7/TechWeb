@@ -210,6 +210,14 @@ app.post("/registrazione", (req, res)=>{
         }
         else
         {
+            var db = dbconn.get();
+            var collection = db.collection('utenti');
+            const nuovoUtente = {
+                nome: req.body.nome,
+                cognome: req.body.cognome,
+                email: req.body.email,
+                password: req.body.password
+            }
             collection.insertOne(nuovoUtente, (err, result)=>{
                 if(err) {
                     console.log("Errore, impossibile inserire utente nel database: " + err);
