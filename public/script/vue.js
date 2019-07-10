@@ -13,6 +13,7 @@ new Vue({
 		return {
 			visualizza: true,
 			purpose_opzioni: purpose_array,
+			purpose_selected: purpose_array[0],
 			language_opzioni: language_nome,
 			language_sigla: language_sigla,
 			content_opzioni: content_nome,

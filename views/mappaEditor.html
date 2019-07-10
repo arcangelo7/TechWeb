@@ -87,7 +87,7 @@
                             <label for="check-scopo" class="col-sm-2 col-form-label">Scopo</label>
                             <div id="check-scopo" class="col-sm-10">
                                 <div class="form-check form-check-inline" v-for="opzione_purpose in purpose_opzioni">
-                                    <input class="form-check-input" name="scopo" type="radio" :value=opzione_purpose>
+                                    <input class="form-check-input" name="scopo" type="radio" :value=opzione_purpose  v-model="purpose_selected">
                                     <label class="form-check-label" for=opzione_purpose>
                                         {{ opzione_purpose }}
                                     </label>
