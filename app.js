@@ -67,17 +67,26 @@ app.get('/editor-mappa', accessoSicuro, (req, res)=>{
     res.sendFile('mappaEditor.html', {root: __dirname + "/views"});
 });
 
-//GESTIONE DEI POST DI MAPPA.HTML
+//GESTIONE DEI POST DI EDITOR MAPPA
 app.post('/editor-mappa',function(req, res) {
-	if(req.body.audio != undefined)
-	{
-		var db = dbconn.get();
-        var collection = db.collection('clip');
-		collection.insertOne(req.body, function(err, result) {
-            if(err) console.log("Errore: impossibile inserire clip all'interno del database"); 
-		});
-	}
-	res.redirect('/lista-clip');
+    console.log(req.body);
+    function aggiungiClip() {
+        return new Promise (function(resolve, reject)
+        {
+            if(req.body.audio != undefined){
+                var db = dbconn.get();
+                var collection = db.collection('clip');
+                collection.insertOne(req.body, function(err, result) {
+                    if(err) console.log("Errore: impossibile inserire clip all'interno del database");
+                });
+            }
+            resolve('Ho caricato la clip');
+            reject('Non ho caricato la clip'); 
+        })
+    }
+    aggiungiClip().then(function(){
+        res.redirect('/lista-clip');
+    });
 });
 
 //ROUTE DELLA PAGINA CHE MOSTRA LE CLIP
@@ -102,7 +111,6 @@ app.delete('/lista-clip/:id', accessoSicuro, (req , res) =>{
         "_id": new mongodb.ObjectID(req.params.id)        
     })
     .then(() =>{
-        console.log(req.params.id)
         req.flash('msg_successo',  'Nota cancellata correttamente');
         res.redirect('/lista-clip');
     });

@@ -60,7 +60,7 @@
             </ul>
         </div>
     </nav>
-    <form id="metadati" method="post">
+    <form id="metadati" method="POST">
         <div id="new-clip-form-modal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -87,7 +87,7 @@
                             <label for="check-scopo" class="col-sm-2 col-form-label">Scopo</label>
                             <div id="check-scopo" class="col-sm-10">
                                 <div class="form-check form-check-inline" v-for="opzione_purpose in purpose_opzioni">
-                                    <input class="form-check-input" type="radio" name="scopo" :value=opzione_purpose v-model="purpose_picked">
+                                    <input class="form-check-input" type="radio" :value=opzione_purpose v-model="purpose_picked">
                                     <label class="form-check-label" for=opzione_purpose>
                                         {{ opzione_purpose }}
                                     </label>
