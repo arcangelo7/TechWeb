@@ -76,7 +76,7 @@ app.post('/editor-mappa',function(req, res) {
         testo: req.body.testo,
         metadati: req.body.olc + ":" + req.body.scopo + ":" + req.body.lingua + ":" + req.body.categoria + ":" + req.body.audience + ":" + req.body.dettaglio,
         audio: req.body.audio,
-        utente: req.user
+        utente: req.session.passport.user
     }
     collection.insertOne(nuovaClip, function(err, result) {
         if(err) console.log("Errore: impossibile inserire clip all'interno del database");
@@ -89,7 +89,7 @@ app.get('/lista-clip', accessoSicuro, function(req,res){
     var db = dbconn.get();
     var collection = db.collection('clip');
     collection
-        .find({utente: req.user})
+        .find({utente: req.session.passport.user})
         .toArray(function(err, result) {
             if (err) {console.log("Errore: impossibile connettersi al db")};   
             res.render('listaClip', { 
