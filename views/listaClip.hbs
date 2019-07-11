@@ -1,11 +1,15 @@
 <div class="container">
-    <h2 class="my-5">Le tue clip</h2>    
+    <h2 class="my-5">Le tue clip</h2> 
+    <div id="autenticati" class="mb-5"> 
+      <div class="alert alert-warning">Per caricare le tue clip su YouTube devi prima autenticarti con Google.</div>
+      <button class="btn btn btn-outline-secondary" onclick="handleAuthClick()"><i class="fab fa-google"></i> Accedi</button>
+    </div>  
     {{#each clip}}
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">{{this.titolo}}</h4>
           <br>
-          <audio style="width: 100%" controls src="data:audio/*;base64,{{this.audio}}"/></audio>
+          <audio style="width: 100%" controls src="data:audio/mp3;base64,{{this.audio}}"/></audio>
 
           <!-- Cancella nota per titolo -->
           <form action='/lista-clip/{{this._id}}?_method=DELETE' method="post" class="my-2">
@@ -16,7 +20,7 @@
           <!-- Carica su Youtube -->
           <form action='/lista-clip/{{this._id}}?_method=POST' method="post" class="my-2">
             <input type="hidden" name="_method" value="POST">
-            <input type="submit" onclick="handleAuthClick()" class="btn btn-success btn-block" value="Carica">
+            <input type="submit" class="btn btn-success btn-block carica" value="Carica">
           </form>
 
         </div>
@@ -98,9 +102,13 @@
         });
     }
 
-    function updateSigninStatus(isSignedIn) {
-        if (isSignedIn) {
-          console.log("Sono loggato")
+  function updateSigninStatus(isSignedIn) {
+        var elements = document.getElementsByClassName("carica");
+        for(var i = 0, length = elements.length; i < length; i++) {
+          if(isSignedIn){
+            console.log("Sono loggato");
+            elements[i].disabled = false;
+            document.getElementById("autenticati").style.display = "none";
             if(document.getElementById("videoToUpload").value.length > 0){
               console.log("Cloudinary ha mandato la risorsa");
               var video = document.getElementById('videoToUpload').value;
@@ -123,11 +131,14 @@
                       // location.reload();
                   })
                 });
+            }
+          } else {
+            console.log("Non sono loggato");
+            elements[i].disabled = true;
+            document.getElementById("autenticati").style.display = "block";
           }
-        } 
-    }
-
-
+        }
+  }
 
   $("a[href='/editor']").addClass("active");
   $("a[href='/lista-clip']").addClass("active");
