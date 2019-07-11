@@ -8,7 +8,7 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">{{this.titolo}}</h4>
-          <br>
+          <p class="card-text">{{this.testo}}</p>
           <audio style="width: 100%" controls src="data:audio/mp3;base64,{{this.audio}}"/></audio>
 
           <!-- Cancella nota per titolo -->
@@ -29,7 +29,8 @@
     {{else}}
     <div class="alert alert-warning">Non c'è nessuna clip</div>
     {{/each}}
-
+    <input type="hidden" id="titolo" value="{{metadata.titolo}}">
+        <input type="hidden" id="metadati" value="{{metadata.metadati}}">
     <input type="hidden" id="videoToUpload" value="{{videoToUpload}}">
 </div>
 
@@ -37,7 +38,7 @@
   /* GAPI integration (oauth2) */
   // Options
   const CLIENT_ID =
-  '807601852112-7omdcouallpk4115i6fueefg4mvnlgll.apps.googleusercontent.com';
+  '79709889386-nradu376m4f9inc267macf8caobl86kb.apps.googleusercontent.com';
   //'1096380917447-8ndu9h398nlfbe38s18ufn1gd9mt2r4u.apps.googleusercontent.com';
   //'723989183881-3jg3po1j4t028fi04n7ihdt4i4mng2fs.apps.googleusercontent.com';
   //'371023340985-hndpejeqbqf8jnqo6k1las37v6caoo0o.apps.googleusercontent.com';
@@ -115,8 +116,8 @@
               var metadata = {
                   kind: 'youtube#video',
                   snippet: {
-                  title: "prova",
-                  description: "questa è una prova"
+                    title: document.getElementById("titolo").value,
+                    description: document.getElementById("metadati").value
                   },
                   status: {
                   privacyStatus: 'public',
@@ -128,7 +129,6 @@
                 .then(blob =>{
                   uploadVideo(blob, metadata, function(data) {
                       alert("Grazie per il tuo contributo!");
-                      // location.reload();
                   })
                 });
             }

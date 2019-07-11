@@ -75,7 +75,8 @@ app.post('/editor-mappa',function(req, res) {
         titolo: req.body.titolo,
         testo: req.body.testo,
         metadati: req.body.olc + ":" + req.body.scopo + ":" + req.body.lingua + ":" + req.body.categoria + ":" + req.body.audience + ":" + req.body.dettaglio,
-        audio: req.body.audio
+        audio: req.body.audio,
+        utente: req.user
     }
     collection.insertOne(nuovaClip, function(err, result) {
         if(err) console.log("Errore: impossibile inserire clip all'interno del database");
@@ -88,7 +89,7 @@ app.get('/lista-clip', accessoSicuro, function(req,res){
     var db = dbconn.get();
     var collection = db.collection('clip');
     collection
-        .find()
+        .find({utente: req.user})
         .toArray(function(err, result) {
             if (err) {console.log("Errore: impossibile connettersi al db")};   
             res.render('listaClip', { 
@@ -142,13 +143,15 @@ app.post('/lista-clip/:id', accessoSicuro, (req , res) =>{
             console.log("* " + audio.secure_url);
             var db = dbconn.get();
             var collection = db.collection('clip');
+            collection.deleteOne({"_id": value._id});
             collection
                 .find()
                 .toArray(function(err, result) {
                     if (err) {console.log("Errore: impossibile connettersi al db")};   
-                    res.render('listaClip', { 
+                    res.render('listaClip', {
                         clip: result,
-                        videoToUpload: audio.secure_url
+                        videoToUpload: audio.secure_url,
+                        metadata: value
                     });
             });
         });
