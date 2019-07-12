@@ -1,5 +1,5 @@
 // initialize the map to show the Europe
-var map = L.map('mappa').setView([41,12], 5);
+var map = L.map('mappa', {scrollWheelZoom:false}).setView([41,12], 5);
 var circle = new L.circle;
 var marker = new L.Marker;
 var popup = new L.popup;

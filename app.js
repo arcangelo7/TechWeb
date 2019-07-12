@@ -62,6 +62,8 @@ app.get('/', (req, res)=>{
     res.render('mappaBrowser');
 });
 
+
+
 /// ROUTE PER PAGINA MAPPA.HTML
 app.get('/editor-mappa', accessoSicuro, (req, res)=>{
     res.sendFile('mappaEditor.html', {root: __dirname + "/views"});
