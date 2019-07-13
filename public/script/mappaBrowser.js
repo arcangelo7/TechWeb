@@ -31,15 +31,13 @@ var popupOptions = {
 // Testo alternativo per l'accessibilità e possibilità di aggiustare la posizione del marker
 var markerOptions = {
     alt: "Marker posizionato sulla tua posizione",
-    draggable: true
+    draggable: false
 }
 
-function getPositionOnDragend() {
-    marker.on('dragend', function() { 
-        var position = marker.getLatLng();
-        circle.setLatLng(position);
-        marker.setLatLng(position).openPopup();
-    });      
+function newPosition() {
+    coordinate = marker.getLatLng();
+    document.getElementById('coordinate').value = coordinate.lat + "," + coordinate.lng;    
+    $("#results").html("");
 }
 
 function onLocationFound(e) {
@@ -53,9 +51,9 @@ function onLocationFound(e) {
     circle = L.circle(e.latlng, 100).addTo(map);
     // Il marker è draggable con posizione aggiornata
     // Il popup e il circle aggiornano la loro posizione
-    getPositionOnDragend();
     // center the map on the right coordinates and zoom
     map.setView(e.latlng, 18); 
+    newPosition();
 }
 
 map.on('locationfound', onLocationFound);
@@ -87,8 +85,9 @@ var geocoder = L.Control.geocoder({
         .setContent(popupContent);
     marker.addTo(map).bindPopup(popup, popupOptions).openPopup();
     circle = L.circle(e.geocode.center, 100).addTo(map);
-    getPositionOnDragend();
     map.setView(e.geocode.center, 18); 
+    newPosition();
+    init();
   })
   .addTo(map);
 
