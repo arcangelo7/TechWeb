@@ -21,8 +21,8 @@ const {accessoSicuro} = require('./config/auth.js');
 app.use(express.static( __dirname + "/public" ));
 
 // MIDDLEWARE BODY PARSER
-app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
-app.use(bodyParser.json()); // parse application/json
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true})); // parse application/x-www-form-urlencoded
+app.use(bodyParser.json({limit: '100mb', extended: true})); // parse application/json
 
 // OVERRIDE MIDDLEWARE
 app.use(methodOverride('_method'));
