@@ -17,6 +17,13 @@
             <input type="submit" class="btn btn-danger btn-block" value="Cancella">
           </form>
 
+          <!-- Modifica clip -->
+          <form action='/modifica-clip/{{this._id}}?_method=POST' method="post" class="my-2">
+            <input type="hidden" name="mod" value="0" />
+            <input type="hidden" name="_method" value="POST">
+            <input type="submit" class="btn btn-primary btn-block" value="Modifica">
+          </form>
+
           <!-- Carica su Youtube -->
           <form action='/lista-clip/{{this._id}}?_method=POST' method="post" class="my-2">
             <input type="hidden" name="_method" value="POST">
