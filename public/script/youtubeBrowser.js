@@ -1,3 +1,18 @@
+var rl = "en";
+var vd = "short";
+
+function languageSelect(){
+    rl = document.getElementById("lingua").value;
+    $("#results").html("");
+    init();
+}
+
+function lenghtSelect(){
+    vd = document.getElementById("approfondimento").value;
+    $("#results").html("");
+    init();
+}
+
 function init() {
     gapi.client.setApiKey("AIzaSyB06GGowaL0BF-ladpPabNIuO3ihMdiqX4");
     gapi.client.load("youtube", "v3", function() {
@@ -8,7 +23,8 @@ function init() {
             location: document.getElementById('coordinate').value,
             locationRadius: "100km",
             q: "teatro",
-            // relevanceLanguage: "it",
+            relevanceLanguage: rl,
+            videoDuration: vd,
             topicId: "/m/07bxq",	
             maxResults: 10,
             order: "relevance"
