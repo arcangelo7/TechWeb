@@ -57,8 +57,25 @@ app.use((req , res, next)=>{
     next();
 });
 
-// ROUTE PER PAGINA INDEX.HTML
+// DOVE TROVARE I FILE STATICI DI INDEX
+app.use(express.static('views/img'));
+
+// ROUTE PER PAGINA INDEX
 app.get('/', (req, res)=>{
+    res.render('index');
+});
+
+// GESTIONE LOGIN DA INDEX
+app.post('/', (req, res, next)=>{
+    passport.authenticate('local', {
+        successRedirect: '/browser-mappa',
+        failureRedirect: '/login',
+        failureFlash: true // return a message called error, using the message options set by the verify callback
+    })(req, res, next); //curryng: that the first function returns another function and then that returned function is called immedia$
+});
+
+// ROUTE PER PAGINA MAPPA BROWSER
+app.get('/browser-mappa', accessoSicuro, (req, res)=>{
     res.render('mappaBrowser');
 });
 
@@ -311,7 +328,7 @@ app.post("/registrazione", (req, res)=>{
 // GESTIONE  LOGIN
 app.post('/login', (req, res, next)=>{
     passport.authenticate('local', {
-        successRedirect: '/editor-mappa',
+        successRedirect: '/browser-mappa',
         failureRedirect: '/login',
         failureFlash: true // return a message called error, using the message options set by the verify callback
     })(req, res, next); //curryng: that the first function returns another function and then that returned function is called immedia$

@@ -65,7 +65,7 @@ function onLocationError(e) {
 map.on('locationerror', onLocationError);
 
 // Add sctive class on proper navbar link
-$("a[href='/']").addClass("active");
+$("a[href='/browser-mappa']").addClass("active");
 
 // Search box
 var geocoder = L.Control.geocoder({
