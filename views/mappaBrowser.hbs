@@ -12,6 +12,19 @@
 <input id="coordinate" type="hidden" value="">
 <input id="videoId" type="hidden" value="">
 
+<select name="lingua" id="lingua" onchange="languageSelect()">
+    <option value="titolo">Scegli la lingua:</option>
+    <option value="it">Italiano</option>
+    <option value="en">English</option>
+</select>
+
+<select name="approfondimento" id="approfondimento" onchange="lenghtSelect()">
+    <option value="titolo">Scegli il livello di approfondimento:</option>
+    <option value="short">1</option>
+    <option value="medium">2</option>
+    <option value="long">3</option>
+</select>
+
 <div class="m-5">
     <div class="row" id="results">
     </div>
