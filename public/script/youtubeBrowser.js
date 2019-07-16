@@ -16,7 +16,7 @@ function lenghtSelect(){
 }
 
 function init() {
-    gapi.client.setApiKey("AIzaSyC5bzLvEG6GGvw8WrsdbETj5tUOe_8wyQQ");
+    gapi.client.setApiKey("AIzaSyB06GGowaL0BF-ladpPabNIuO3ihMdiqX4");
     gapi.client.load("youtube", "v3", function() {
         console.log("YouTube Api is ready");
         var request = gapi.client.youtube.search.list({
