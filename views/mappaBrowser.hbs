@@ -1,0 +1,67 @@
+<div>
+    <div id="mappa">
+        <div id="video-placeholder"></div>
+    </div>
+    <div id='inputs'></div>
+    <div id='errors'></div>
+    <div id='directions'>
+    <div id='routes'></div>
+    <div id='instructions'></div>
+</div>
+
+<input id="coordinate" type="hidden" value="">
+<input id="videoId" type="hidden" value="">
+
+<div id="linguaDiv" style="display: inline-block;"></div>
+
+<select name="approfondimento" id="approfondimento" onchange="lenghtSelect()">
+    <option value="titolo">Scegli il livello di approfondimento:</option>
+    <option value="short">1</option>
+    <option value="medium">2</option>
+    <option value="long">3</option>
+</select>
+
+<div class="m-5">
+    <div class="row" id="results">
+    </div>
+</div>
+
+<script src="script/youtubeBrowser.js"></script>
+<script src="script/mappaBrowser.js"></script>
+<script src="https://apis.google.com/js/client.js?onload=init"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    var player;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('video-placeholder', {
+            width: 200,
+            height: 200,
+            playerVars: {'origin':'https://site181909.tw.cs.unibo.it'}
+        });
+    }
+
+    var linguaDiv = document.getElementById("linguaDiv");
+    //creazione dell'array con i valori da aggiungere
+    var array = ["italiano","english"];
+    var array2 = ["it","en"];
+
+    //creazione della lista dei valori
+    var linguaSelected = document.createElement("select");
+    linguaSelected.id = "lingua";
+    linguaSelected.name = "lingua";
+    linguaSelected.addEventListener("change", languageSelect);
+    linguaDiv.appendChild(linguaSelected);
+
+    //crezione e aggiunta delle opzioni
+    for (var i = 0; i < array.length; i++) {
+        var option = document.createElement("option");
+        option.value = array2[i];
+        option.text = array[i];
+        if(array[i]=="{{ lingua }}")
+        {
+          option.selected = true;
+        }
+        linguaSelected.appendChild(option);
+    }
+</script>
