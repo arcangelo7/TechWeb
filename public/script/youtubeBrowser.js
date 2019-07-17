@@ -1,5 +1,10 @@
-var vd = "short";
-var rl = document.getElementById("lingua").value;
+var vd;
+var rl;
+
+$( document ).ready(function() {
+    var vd = "short";
+    var rl = document.getElementById("lingua").value;
+});
 
 function languageSelect(){
     rl = document.getElementById("lingua").value;
