@@ -1,29 +1,14 @@
 <div class="container">
   <h2 class="my-4">Preferenze utente: {{ nome }} {{ cognome }} ({{ email }})</h2>
   <form id="preferenze" action="/preferenze" method="POST">
-    <div id="linguaDiv" class="mb-4">Lingua: </div>
+    <select name="lingua" id="lingua" onchange="languageSelect()">
+      <option id="italiano" value="italiano">italiano</option>
+      <option id="english" value="english">english</option>
+    </select>
+    <br><br>
     <button type="submit" class="btn btn-success">Aggiorna</button>
   </form>
 </div>
 <script>
-  var linguaDiv = document.getElementById("linguaDiv");
-  //creazione dell'array con i valori da aggiungere
-  var array = ["italiano", "english"];
-
-  //creazione della lista dei valori
-  var linguaSelected = document.createElement("select");
-  linguaSelected.id = "lingua";
-  linguaSelected.name = "lingua";
-  linguaDiv.appendChild(linguaSelected);
-
-  //crezione e aggiunta delle opzioni
-  for (var i = 0; i < array.length; i++) {
-    var option = document.createElement("option");
-    option.value = array[i];
-    option.text = array[i];
-    if (array[i] == "{{ lingua }}") {
-      option.selected = true;
-    }
-    linguaSelected.appendChild(option);
-  }
+  document.getElementById("{{lingua}}").selected = "true";
 </script>
