@@ -59,6 +59,120 @@ function init() {
                     var descrizione = description.split("%%%")[1];
                     var olc = metadati.split(":")[0];
                     var coordinate = OpenLocationCode.decode(olc);
+                    var scopo = metadati.split(":")[1];
+                    switch(scopo) {
+                        case "what":
+                            scopo = "Che cos'è?";
+                            break;
+                        case "how":
+                            scopo = "Come ci arrivo?";
+                            break;
+                        case "why?":
+                            scopo = "Perché ne vale la pena?";
+                            break;
+                    }
+                    var lingua = metadati.split(":")[2];
+                    switch(lingua) {
+                        case "ita":
+                            lingua = "italiano";
+                            break;
+                        case "eng":
+                            lingua = "inglese";
+                            break;
+                        case "deu":
+                            lingua = "tedesco";
+                            break;
+                        case "fra":
+                            lingua = "francese";
+                            break;
+                        case "esp":
+                            lingua = "spagnolo";
+                            break;
+                    }
+                    var categoria = metadati.split(":")[3];
+                    switch(categoria) {
+                        case "none":
+                            categoria = "nessuna";
+                            break;
+                        case "nat":
+                            categoria = "natura";
+                            break;
+                        case "art":
+                            categoria = "arte";
+                            break;
+                        case "his":
+                            categoria = "storia";
+                            break;
+                        case "flk":
+                            categoria = "folklore";
+                            break;
+                        case "mod":
+                            categoria = "cultura moderna";
+                            break;
+                        case "rel":
+                            categoria = "religione";
+                            break;
+                        case "cui":
+                            categoria = "cucina e drink";
+                            break;
+                        case "spo":
+                            categoria = "sport";
+                            break;
+                        case "mus":
+                            categoria = "musica";
+                            break;
+                        case "mov":
+                            categoria = "film";
+                            break;
+                        case "fas":
+                            categoria = "moda";
+                            break;
+                        case "shp":
+                            categoria = "shopping";
+                            break;
+                        case "tec":
+                            categoria = "tecnologia";
+                            break;
+                        case "pop":
+                            categoria = "cult. pop. e gossip";
+                            break;
+                        case "prs":
+                            categoria = "esperienze personali";
+                            break;
+                        case "oth":
+                            categoria = "altro";
+                            break;
+                    }
+                    var audience = metadati.split(":")[4];
+                    switch(audience) {
+                        case "gen":
+                            audience = "pubblico generico";
+                            break;
+                        case "pre":
+                            audience = "pre-scuola";
+                            break;
+                        case "elm":
+                            audience = "scuola primaria";
+                            break;
+                        case "mid":
+                            audience = "scuola media";
+                            break;
+                        case "scl":
+                            audience = "specialisti del settore";
+                            break;
+                    }
+                    var dettaglio = metadati.split(":")[5];
+                    switch(dettaglio) {
+                        case "1":
+                            dettaglio = "leggero";
+                            break;
+                        case "2":
+                            dettaglio = "medio";
+                            break;
+                        case "3":
+                            dettaglio = "approfondito";
+                            break;
+                    }
                     var markerContent =
                                         `
                                         <div id="${videoId}mappa" class="card">
@@ -82,8 +196,15 @@ function init() {
                                 <img id="card-image" class="position-static card-img-top" src="${thumbUrlHight}" alt="Anteprima video YouTube">
                                 <div class="card-body">
                                     <h5 class="card-title">${title}</h5>
+                                    <p class="card-text">${scopo}</p>
                                     <p class="card-text clip-description">${descrizione}</p>
                                 </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><strong>Lingua</strong>: ${lingua}</li>
+                                    <li class="list-group-item"><strong>Categoria</strong>: ${categoria}</li>
+                                    <li class="list-group-item"><strong>Audience</strong>: ${audience}</li>
+                                    <li class="list-group-item"><strong>Dettaglio</strong>: ${dettaglio}</li>
+                                </ul>
                                 <div class="card-footer text-center">
                                     <button id="${videoId}" class="btn"><i class="far fa-play-circle fa-3x"></i></button>
                                     <button class="pause btn"><i class="far fa-pause-circle fa-3x"></i></button>
