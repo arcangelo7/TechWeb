@@ -107,8 +107,17 @@ app.post('/preferenze', accessoSicuro, (req, res)=>{
 
 // ROUTE PER PAGINA MAPPA BROWSER
 app.get('/browser-mappa', accessoSicuro, (req, res)=>{
-    res.render('mappaBrowser');
+    var db = dbconn.get();
+    var collection = db.collection('utenti');
+    collection.findOne({"_id": new mongodb.ObjectID(req.session.passport.user)}, function(err, result) {
+        if(err) console.log("Errore: impossibile inserire clip all'interno del database");
+        console.log("req.session.passport.user: " + req.session.passport.user);
+        res.render('mappaBrowser', {
+            lingua: result.lingua
+        });
+    });
 });
+
 
 /// ROUTE PER PAGINA MAPPA.HTML
 app.get('/editor-mappa', accessoSicuro, (req, res)=>{
