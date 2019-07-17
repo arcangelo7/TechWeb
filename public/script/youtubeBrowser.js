@@ -14,20 +14,20 @@ function lenghtSelect(){
 
 function init() {
     rl = document.getElementById("lingua").value;
-    gapi.client.setApiKey("AIzaSyB06GGowaL0BF-ladpPabNIuO3ihMdiqX4");
+    gapi.client.setApiKey("AIzaSyDqgVctqbqa3G_DK4UBnH6v7cOqrSGr8L0");
     gapi.client.load("youtube", "v3", function() {
         console.log("YouTube Api is ready");
         var request = gapi.client.youtube.search.list({
             part: "snippet",
             type: "video",
-            location: document.getElementById('coordinate').value,
-            locationRadius: "100km",
-            q: "teatro",
-            relevanceLanguage: rl,
-            videoDuration: vd,
-            topicId: "/m/07bxq",	
-            maxResults: 10,
-            order: "relevance"
+            // location: document.getElementById('coordinate').value,
+            // locationRadius: "100km",
+            q: "8FPHFC5J+8X:what:ita:none:gen:1%%%Questa è una clip di cui conservare la descrizione.",
+            // relevanceLanguage: rl,
+            // videoDuration: vd,
+            // topicId: "/m/07bxq",	
+            maxResults: 5
+            // order: "relevance"
         }); 
         // execute the request
         request.execute(function(response) {
@@ -50,24 +50,29 @@ function init() {
                 for(var i = 0; i < response.items.length; i++){
                     var title = response.items[i].snippet.title;
                     var description = response.items[i].snippet.description;
-                    var coordinate = response.items[i].recordingDetails.location;
+                    // var coordinate = response.items[i].recordingDetails.location;
                     var videoId = response.items[i].id;
-                    var lat = coordinate.latitude;
-                    var long = coordinate.longitude;   
+                    // var lat = coordinate.latitude;
+                    // var long = coordinate.longitude;   
                     var thumbUrlHight = response.items[i].snippet.thumbnails.high.url;
+                    var metadati = description.split("%%%")[0];
+                    var descrizione = description.split("%%%")[1];
+                    var olc = metadati.split(":")[0];
+                    var coordinate = OpenLocationCode.decode(olc);
                     var markerContent =
                                         `
                                         <div id="${videoId}mappa" class="card">
                                             <div class="card-body">
                                                 <h5 class="card-title">${title}</h5>
-                                                <p class="card-text clip-description">${description}</p>
+                                                <p class="card-text clip-description">${descrizione}</p>
                                             </div>
                                             <div class="card-footer text-center">
                                                 <a class="btn" href="#${videoId}link">Vai alla clip</a>
                                             </div>
                                         </div>                                
                                         `;
-                    marker = new L.marker([lat,long], {myCustomId: videoId + "mappa"})
+
+                    marker = new L.marker([coordinate.latitudeCenter, coordinate.longitudeCenter], {myCustomId: videoId + "mappa"})
                         .bindPopup(markerContent)
                         .addTo(map);
                     $("#results").append(
@@ -77,7 +82,7 @@ function init() {
                                 <img id="card-image" class="position-static card-img-top" src="${thumbUrlHight}" alt="Anteprima video YouTube">
                                 <div class="card-body">
                                     <h5 class="card-title">${title}</h5>
-                                    <p class="card-text clip-description">${description}</p>
+                                    <p class="card-text clip-description">${descrizione}</p>
                                 </div>
                                 <div class="card-footer text-center">
                                     <button id="${videoId}" class="btn"><i class="far fa-play-circle fa-3x"></i></button>

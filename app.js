@@ -202,7 +202,7 @@ app.post('/lista-clip/:id', accessoSicuro, (req , res) =>{
             var collection = db.collection('clip');
             collection.deleteOne({"_id": value._id});
             collection
-                .find()
+                .find({utente: req.session.passport.user})
                 .toArray(function(err, result) {
                     if (err) {console.log("Errore: impossibile connettersi al db")};   
                     res.render('listaClip', {

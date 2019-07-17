@@ -36,6 +36,7 @@ function onLocationFound(e) {
                                 <h3>Tu sei qui <i id='microfono' class='fas fa-microphone'></i></h3>
                                 <p id='popupText' class='lead'>Clicca per creare una clip</p>
                                 <button id='registratore' class='btn btn-primary'>Crea</button>
+                                <button id='registratore-no-autorizzazione' class='btn btn-primary' hidden>Crea</button>
                                 <button id='stop' class='btn btn-primary' hidden>Stop</button>
                         </div>`
 
@@ -88,6 +89,7 @@ function manipolaPopupRegistrazione(){
   $('#registratore, #registratore-no-autorizzazione').click(function()
   {
       document.getElementById("registratore").hidden = true;
+      document.getElementById("registratore-no-autorizzazione").hidden = true;
       document.getElementById("stop").hidden = false;
       $("#microfono").css("color", "red");
    
@@ -96,7 +98,7 @@ function manipolaPopupRegistrazione(){
   $('#stop').click(function() 
   {
     document.getElementById("stop").hidden = true;
-    document.getElementById("registratore").hidden = false;
+    document.getElementById("registratore-no-autorizzazione").hidden = false;
     $("#microfono").css("color", "black");
     $("#popupText").text("Clicca per creare una clip");
     $('#new-clip-form-modal').modal();

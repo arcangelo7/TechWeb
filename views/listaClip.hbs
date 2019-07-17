@@ -39,6 +39,7 @@
   {{/each}}
   <input type="hidden" id="titolo" value="{{metadata.titolo}}">
   <input type="hidden" id="metadati" value="{{metadata.metadati}}">
+  <input type="hidden" id="testo" value="{{metadata.testo}}">
   <input type="hidden" id="videoToUpload" value="{{videoToUpload}}">
 </div>
 
@@ -121,7 +122,7 @@
               kind: 'youtube#video',
               snippet: {
                 title: document.getElementById("titolo").value,
-                description: document.getElementById("metadati").value
+                description: document.getElementById("metadati").value + "%%%" + document.getElementById("testo").value
               },
               status: {
                 privacyStatus: 'public',
