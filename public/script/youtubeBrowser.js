@@ -1,7 +1,5 @@
-var rl = "en";
 var vd = "short";
-rl = document.getElementById("lingua").value;
-vd = document.getElementById("approfondimento").value;
+var rl = document.getElementById("lingua").value;
 
 function languageSelect(){
     rl = document.getElementById("lingua").value;
@@ -111,9 +109,5 @@ function init() {
         });   
     });
 }
-
-$(document).on("ready", function(){
-    init();
-})
 
 
