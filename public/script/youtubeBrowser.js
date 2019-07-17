@@ -1,13 +1,7 @@
-var vd;
+var vd = "short";
 var rl;
 
-$( document ).ready(function() {
-    var vd = "short";
-    var rl = document.getElementById("lingua").value;
-});
-
 function languageSelect(){
-    rl = document.getElementById("lingua").value;
     $("#results").html("");
     init();
 }
@@ -19,6 +13,7 @@ function lenghtSelect(){
 }
 
 function init() {
+    rl = document.getElementById("lingua").value;
     gapi.client.setApiKey("AIzaSyB06GGowaL0BF-ladpPabNIuO3ihMdiqX4");
     gapi.client.load("youtube", "v3", function() {
         console.log("YouTube Api is ready");
