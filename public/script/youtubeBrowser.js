@@ -14,20 +14,16 @@ function lenghtSelect(){
 
 function init() {
     rl = document.getElementById("lingua").value;
-    gapi.client.setApiKey("AIzaSyDqgVctqbqa3G_DK4UBnH6v7cOqrSGr8L0");
+    gapi.client.setApiKey("AIzaSyC5bzLvEG6GGvw8WrsdbETj5tUOe_8wyQQ");
     gapi.client.load("youtube", "v3", function() {
         console.log("YouTube Api is ready");
         var request = gapi.client.youtube.search.list({
             part: "snippet",
             type: "video",
-            // location: document.getElementById('coordinate').value,
-            // locationRadius: "100km",
-            q: "8FPHFC5J+8X:what:ita:none:gen:1%%%Questa è una clip di cui conservare la descrizione.",
-            // relevanceLanguage: rl,
-            // videoDuration: vd,
-            // topicId: "/m/07bxq",	
+            channelId: "UC5mREzTEPh9h1vUhPq1FKhQ",
+            relevanceLanguage: rl,
+            videoDuration: vd,
             maxResults: 5
-            // order: "relevance"
         }); 
         // execute the request
         request.execute(function(response) {

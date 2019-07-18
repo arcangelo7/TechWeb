@@ -47,10 +47,8 @@
   /* GAPI integration (oauth2) */
   // Options
   const CLIENT_ID =
-    '728495399298-7pn0ppv0ujalaq4j07ehnoel0dnlense.apps.googleusercontent.com';
-  //'1096380917447-8ndu9h398nlfbe38s18ufn1gd9mt2r4u.apps.googleusercontent.com';
-  //'723989183881-3jg3po1j4t028fi04n7ihdt4i4mng2fs.apps.googleusercontent.com';
-  //'371023340985-hndpejeqbqf8jnqo6k1las37v6caoo0o.apps.googleusercontent.com';
+    '807601852112-7omdcouallpk4115i6fueefg4mvnlgll.apps.googleusercontent.com';
+  //'728495399298-7pn0ppv0ujalaq4j07ehnoel0dnlense.apps.googleusercontent.com';
 
   const DISCOVERY_DOCS = [
     'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'
@@ -122,7 +120,7 @@
               kind: 'youtube#video',
               snippet: {
                 title: document.getElementById("titolo").value,
-                description: document.getElementById("metadati").value + "%%%" + document.getElementById("testo").value
+                description: document.getElementById("metadati").value + "%%%" + document.getElementById("testo").value,
               },
               status: {
                 privacyStatus: 'public',
