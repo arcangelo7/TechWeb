@@ -53,7 +53,7 @@ function onLocationFound(e) {
     // center the map on the right coordinates and zoom
     map.setView(e.latlng, 18); 
     newPosition();
-    init();
+    // init();
 }
 
 map.on('locationfound', onLocationFound);

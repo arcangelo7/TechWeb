@@ -1,29 +1,33 @@
-var vd = "short";
 var rl;
+var audienceSelezionata;
+var dettaglioSelezionato;
 
-function languageSelect(){
+function filtra(){
     $("#results").html("");
     init();
 }
 
-function lenghtSelect(){
-    vd = document.getElementById("approfondimento").value;
-    $("#results").html("");
-    init();
-}
+// function lenghtSelect(){
+//     vd = document.getElementById("approfondimento").value;
+//     $("#results").html("");
+//     init();
+// }
 
 function init() {
     rl = document.getElementById("lingua").value;
-    gapi.client.setApiKey("AIzaSyC5bzLvEG6GGvw8WrsdbETj5tUOe_8wyQQ");
+    audienceSelezionata = document.getElementById("audience").value;
+    dettaglioSelezionato = document.getElementById("dettaglio").value;
+    // gapi.client.setApiKey("AIzaSyC5bzLvEG6GGvw8WrsdbETj5tUOe_8wyQQ");
+    // gapi.client.setApiKey("AIzaSyB06GGowaL0BF-ladpPabNIuO3ihMdiqX4");
+    gapi.client.setApiKey("AIzaSyC3vOztNiecvkLDdHCnP8W3nEafKFdohNQ");
     gapi.client.load("youtube", "v3", function() {
         console.log("YouTube Api is ready");
         var request = gapi.client.youtube.search.list({
             part: "snippet",
             type: "video",
             channelId: "UC5mREzTEPh9h1vUhPq1FKhQ",
-            relevanceLanguage: rl,
-            videoDuration: vd,
-            maxResults: 5
+            maxResults: 10,
+            order: "title"
         }); 
         // execute the request
         request.execute(function(response) {
@@ -39,11 +43,14 @@ function init() {
             var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
             var videoIDRequest = gapi.client.youtube.videos.list({
                 id: videoIDStringFinal,
-                part: 'id,snippet,recordingDetails'
+                part: 'id,snippet,recordingDetails',
+                order: "title"
             });
             videoIDRequest.execute(function(response) {
                 console.log(response);
+                var items = [];
                 for(var i = 0; i < response.items.length; i++){
+                    items.push(response.items[i]);
                     var title = response.items[i].snippet.title;
                     var description = response.items[i].snippet.description;
                     // var coordinate = response.items[i].recordingDetails.location;
@@ -69,19 +76,19 @@ function init() {
                     }
                     var lingua = metadati.split(":")[2];
                     switch(lingua) {
-                        case "ita":
+                        case "it":
                             lingua = "italiano";
                             break;
-                        case "eng":
+                        case "en":
                             lingua = "inglese";
                             break;
-                        case "deu":
+                        case "de":
                             lingua = "tedesco";
                             break;
-                        case "fra":
+                        case "fr":
                             lingua = "francese";
                             break;
-                        case "esp":
+                        case "es":
                             lingua = "spagnolo";
                             break;
                     }
@@ -181,7 +188,6 @@ function init() {
                                             </div>
                                         </div>                                
                                         `;
-
                     marker = new L.marker([coordinate.latitudeCenter, coordinate.longitudeCenter], {myCustomId: videoId + "mappa"})
                         .bindPopup(markerContent)
                         .addTo(map);
@@ -227,9 +233,34 @@ function init() {
                         </script>
                     `);
                 }
+                // FILTRI
+                var ids = [];
+                // Hide cards
+                for(i = 0; i < items.length; i++) {
+                    var description = items[i].snippet.description;
+                    var id = items[i].id;
+                    var lingua = description.split(":")[2];
+                    var audience = description.split(":")[4];
+                    var dettaglio = description.split(":")[5];
+                    dettaglio = dettaglio.split("%%%")[0];
+                    if(lingua != rl || audienceSelezionata != audience || dettaglioSelezionato != dettaglio){
+                        ids.push(id);
+                        document.getElementById(id+"link").hidden = true;                
+                    }
+                }
+                // Delete markers
+                for(i = 0; i < ids.length; i++){
+                    var currentId = ids[i];
+                    map.eachLayer(function(layer){
+                        if(layer.options.myCustomId == (currentId + "mappa")) {
+                            map.removeLayer(layer);
+                        }
+                    });   
+                }
             });
         });   
     });
+    map.closePopup();
 }
 
 

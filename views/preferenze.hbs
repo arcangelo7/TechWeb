@@ -3,12 +3,24 @@
   <form id="preferenze" action="/preferenze" method="POST">
     <select name="lingua" id="lingua">
       <option id="italiano" value="italiano">italiano</option>
-      <option id="english" value="english">english</option>
+      <option id="inglese" value="inglese">inglese</option>
+      <option id="tedesco" value="tedesco">tedesco</option>
+      <option id="francese" value="francese">francese</option>
+      <option id="spagnolo" value="spagnolo">spagnolo</option>
+    </select>
+    <br><br>
+    <select name="audience" id="audience">
+      <option id="gen" value="gen">pubblico generico</option>
+      <option id="pre" value="pre">pre-scuola</option>
+      <option id="elm" value="elm">scuola primaria</option>
+      <option id="mid" value="mid">scuola media</option>
+      <option id="scl" value="scl">specialisti del settore</option>
     </select>
     <br><br>
     <button type="submit" class="btn btn-success">Aggiorna</button>
   </form>
 </div>
 <script>
-  document.getElementById("{{lingua}}").selected = "true";
+  document.getElementById("{{lingua}}").selected = true;
+  document.getElementById("{{audience}}").selected = true;
 </script>

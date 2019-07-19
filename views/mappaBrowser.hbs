@@ -20,19 +20,31 @@
 
 <div id="linguaDiv" style="display: inline-block;"></div>
 
-<select name="approfondimento" id="approfondimento" onchange="lenghtSelect()">
-    <option value="short">1</option>
-    <option value="medium">2</option>
-    <option value="long">3</option>
-</select>
+<select name="audience" id="audience" onchange="filtra()">
+    <option id="gen" value="gen">pubblico generico</option>
+    <option id="pre" value="pre">pre-scuola</option>
+    <option id="elm" value="elm">scuola primaria</option>
+    <option id="mid" value="mid">scuola media</option>
+    <option id="scl" value="scl">specialisti del settore</option>
+</select> 
+
+<script>
+    document.getElementById("{{audience}}").selected = true;
+</script>
+
+<select name="dettaglio" id="dettaglio" onchange="filtra()">
+    <option id="1" value="1">leggero</option>
+    <option id="2" value="2">medio</option>
+    <option id="3" value="3">approfondito</option>
+</select> 
 
 <div class="m-5">
     <div class="row" id="results">
     </div>
 </div>
 
-<script src="script/youtubeBrowser.js"></script>
 <script src="script/mappaBrowser.js"></script>
+<script src="script/youtubeBrowser.js"></script>
 <script src="https://apis.google.com/js/client.js?onload=init"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
@@ -48,22 +60,22 @@
 
     var linguaDiv = document.getElementById("linguaDiv");
     //creazione dell'array con i valori da aggiungere
-    var array = ["italiano","english"];
-    var array2 = ["it","en"];
+    var arrayLinguaEstesa = ['italiano','inglese','tedesco','francese','spagnolo'];
+    var arrayLinguaAbbreviata = ['it','en','de','fr','es'];
 
     //creazione della lista dei valori
     var linguaSelected = document.createElement("select");
     linguaSelected.id = "lingua";
     linguaSelected.name = "lingua";
-    linguaSelected.addEventListener("change", languageSelect);
+    linguaSelected.addEventListener("change", filtra);
     linguaDiv.appendChild(linguaSelected);
 
     //crezione e aggiunta delle opzioni
-    for (var i = 0; i < array.length; i++) {
+    for (var i = 0; i < arrayLinguaEstesa.length; i++) {
         var option = document.createElement("option");
-        option.value = array2[i];
-        option.text = array[i];
-        if(array[i]=="{{ lingua }}")
+        option.value = arrayLinguaAbbreviata[i];
+        option.text = arrayLinguaEstesa[i];
+        if(arrayLinguaEstesa[i]=="{{ lingua }}")
         {
           option.selected = true;
         }

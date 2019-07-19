@@ -1,3 +1,4 @@
+
 // initialize the map to show the Europe
 var map = L.map('mappa').setView([41,12], 5);
 
@@ -36,7 +37,6 @@ function onLocationFound(e) {
                                 <h3>Tu sei qui <i id='microfono' class='fas fa-microphone'></i></h3>
                                 <p id='popupText' class='lead'>Clicca per creare una clip</p>
                                 <button id='registratore' class='btn btn-primary'>Crea</button>
-                                <button id='registratore-no-autorizzazione' class='btn btn-primary' hidden>Crea</button>
                                 <button id='stop' class='btn btn-primary' hidden>Stop</button>
                         </div>`
 
@@ -65,6 +65,7 @@ function onLocationFound(e) {
         var position = marker.getLatLng();
         circle.setLatLng(position);
         marker.setLatLng(position).openPopup();
+        document.getElementById('olc').value = OpenLocationCode.encode(position.lat, position.lng);
     });   
     // center the map on the right coordinates and zoom
     map.setView(e.latlng, 18);
@@ -86,10 +87,9 @@ function onLocationError(e) {
 map.on('locationerror', onLocationError);
 
 function manipolaPopupRegistrazione(){
-  $('#registratore, #registratore-no-autorizzazione').click(function()
+  $('#registratore').click(function()
   {
       document.getElementById("registratore").hidden = true;
-      document.getElementById("registratore-no-autorizzazione").hidden = true;
       document.getElementById("stop").hidden = false;
       $("#microfono").css("color", "red");
    
@@ -98,11 +98,12 @@ function manipolaPopupRegistrazione(){
   $('#stop').click(function() 
   {
     document.getElementById("stop").hidden = true;
-    document.getElementById("registratore-no-autorizzazione").hidden = false;
+    document.getElementById("registratore").hidden = false;
     $("#microfono").css("color", "black");
     $("#popupText").text("Clicca per creare una clip");
     $('#new-clip-form-modal').modal();
-  });    
+  }); 
+  audioCapture();  
 }
 
 // Comportamento dell'interfaccia per registrare

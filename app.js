@@ -86,17 +86,15 @@ app.get('/preferenze', accessoSicuro, (req, res)=>{
             nome: result.nome,
             cognome: result.cognome,
             email: result.email,
-            lingua: result.lingua
+            lingua: result.lingua,
+            audience: result.audience
         });
     });
 });
 
 //AGGIORNAMENTO DELLE PREFERENZE
 app.post('/preferenze', accessoSicuro, (req, res)=>{
-    console.log("preferenze");
-    const lingua = req.body.lingua;
-    console.log("lingua: " + lingua);
-    var newvalue = { $set: { lingua: req.body.lingua } };
+    var newvalue = { $set: { lingua: req.body.lingua, audience: req.body.audience } };
     var db = dbconn.get();
     var collection = db.collection('utenti');
     collection.updateOne({"_id": new mongodb.ObjectID(req.session.passport.user)}, newvalue, (err, result)=>{
@@ -113,7 +111,8 @@ app.get('/browser-mappa', accessoSicuro, (req, res)=>{
         if(err) console.log("Errore: impossibile inserire clip all'interno del database");
         console.log("req.session.passport.user: " + req.session.passport.user);
         res.render('mappaBrowser', {
-            lingua: result.lingua
+            lingua: result.lingua,
+            audience: result.audience
         });
     });
 });
@@ -351,7 +350,9 @@ app.post("/registrazione", (req, res)=>{
                 nome: req.body.nome,
                 cognome: req.body.cognome,
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
+                lingua: 'italiano',
+                audience: 'pubblico generico'
             }
             collection.insertOne(nuovoUtente, (err, result)=>{
                 if(err) {

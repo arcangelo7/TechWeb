@@ -1,124 +1,82 @@
-map.on('popupopen', function() {
+function audioCapture() {
+    console.log("Popupopen");
 
-        
-    let constraintObj = { 
-        audio: true, 
-        video: false
-    }; 
+    var gumStream;
+    var recorder;
+    var input;
+    var encodingType;
+    var encodeAfterRecord = true;
+  
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    var audioContext; //new audio context to help us record
     
     var start = document.getElementById('registratore');
-    
-        
-        start.addEventListener('click', (ev)=>{
-
-            //handle older browsers that might implement getUserMedia in some way
-            if (navigator.mediaDevices === undefined) {
-                navigator.mediaDevices = {};
-                navigator.mediaDevices.getUserMedia = function(constraintObj) {
-                    let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-                    if (!getUserMedia) {
-                        return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-                    }
-                    return new Promise(function(resolve, reject) {
-                        getUserMedia.call(navigator, constraintObj, resolve, reject);
-                    });
-                }
-            }else{
-                navigator.mediaDevices.enumerateDevices()
-                .then(devices => {
-                    devices.forEach(device=>{
-                        console.log(device.kind.toUpperCase(), device.label);
-                    })
-                })
-                .catch(err=>{
-                    console.log(err.name, err.message);
-                    alert(err.name, err.message);
-                })
-            }
-            navigator.mediaDevices.getUserMedia(constraintObj)
-            .then(function(mediaStreamObj) {
+    //var start = document.querySelectorAll("#registratore, #registratore-no-autorizzazione");
+    start.addEventListener('click', (ev)=>{
+        console.log("CLICCATO");
+        var constraints = { audio: true, video:false }
+  
+        navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+            console.log("then");
+            audioContext = new AudioContext();
+            gumStream = stream;
+            input = audioContext.createMediaStreamSource(stream);
+            encodingType = "mp3";
+            console.log("then");
             
-                //add listeners for saving video/audio
-                start = document.getElementById('registratore-no-autorizzazione');
-                let stop = document.getElementById('stop');
-                let mediaRecorder = new MediaRecorder(mediaStreamObj);
-                let chunks = [];
-
-                while(navigator.mediadevices = true){
-                mediaRecorder.start();
-                console.log(mediaRecorder.state);
-                
-                start.addEventListener('click', (ev)=>{
-                    mediaRecorder.start();
-                    console.log(mediaRecorder.state);
-                });
-
-                stop.addEventListener('click', (ev)=>{
-                    mediaRecorder.stop();
-                    console.log(mediaRecorder.state);
-                });
-                mediaRecorder.ondataavailable = function(ev) {
-                    chunks.push(ev.data);
-                }
-                mediaRecorder.onstop = (ev)=>{
-                    let blob = new Blob(chunks, { 'type' : 'audio/mp3;' });
-                    chunks = [];
-                    let audioURL = window.URL.createObjectURL(blob);
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        b64 = reader.result.replace(/^data:.+;base64,/, '');
-                        document.getElementById("audio").value = b64;
-                        console.log(b64);
-                    };
-                    reader.readAsDataURL(blob);
-                }
-            }
-        
-        })
-            .catch(function(err) { 
-                console.log(err.name, err.message);
-                if(err.name=="AbortError"){
-                    info.update = function () {
-                        this._div.innerHTML = '<p>Errore: qualcosa ha impedito il funzionamento del sito. Ricaricare la pagina</p>';
-                        };  
-                        info.addTo(map);
-                }
-                else if(err.name=="NotAllowedError"){
-                            info.update = function () {
-                                this._div.innerHTML = '<p>Errore: accesso al microfono non consentito. Registrazione non possibile </p>';
-                                };  
-                                info.addTo(map);
-                }
-                else if(err.name=="NotFoundError"){
-                    info.update = function () {
-                        this._div.innerHTML = '<p>Errore: Impossibile trovare la traccia audio</p>';
-                        };  
-                        info.addTo(map);
-                }
-                else if(err.name=="NotReadableError"){
-                    info.update = function () {
-                        this._div.innerHTML = '<p>Errore: Impossibile accedere al microfono a causa di un problema software o hardware</p>';
-                        };  
-                        info.addTo(map);
-                }
-                else if(err.name=="OverconstrainedError"){
-                    info.update = function () {
-                        this._div.innerHTML = err.message;
-                        };  
-                        info.addTo(map);
-                }
-                else if(err.name=="SecurityError"){
-                    info.update = function () {
-                        this._div.innerHTML = '<p>Errore: la funzionalità richiesta è disabilitata a causa di qualche impostazione di sicurezza</p>';
-                        };  
-                        info.addTo(map);
-                }
-                else if(err.name=="TypeError"){
-                    info.update = function () {
-                        this._div.innerHTML = '<p>Errore: flusso multimediale non specificato</p>';
-                        };  
-                        info.addTo(map);
+  
+            recorder = new WebAudioRecorder(input, {
+                workerDir: "script/WebAudioRecorder/", // must end with slash
+                encoding: encodingType,
+                numChannels:2, //2 is the default, mp3 encoding supports only 2
+                onEncoderLoading: function(recorder, encoding) {
+                    // show "loading encoder..." display
+                    console.log("Loading "+encoding+" encoder...");
+                },
+                onEncoderLoaded: function(recorder, encoding) {
+                    // hide "loading encoder..." display
+                    console.log(encoding+" encoder loaded");
                 }
             });
+  
+            recorder.onComplete = function(recorder, blob) { 
+                console.log("Encoding complete");
+                var reader = new FileReader();
+                reader.onload = function () {
+                    b64 = reader.result.replace(/^data:.+;base64,/, '');
+                    document.getElementById("audio").value = b64;
+                    console.log(b64);
+                };
+                reader.readAsDataURL(blob);
+            }
+    
+            recorder.setOptions({
+                timeLimit:120,
+                encodeAfterRecord:encodeAfterRecord,
+                ogg: {quality: 0.5},
+                mp3: {bitRate: 160}
+            });
+  
+            //start the recording process
+            recorder.startRecording();
+  
+            console.log("Recording started");
+            
+            let stop = document.getElementById('stop');
+  
+            stop.addEventListener('click', (ev)=>{
+                console.log("stopRecording() called");
+    
+                //stop microphone access
+                gumStream.getAudioTracks()[0].stop();
+                //tell the recorder to finish the recording (stop recording + encode the recorded audio)
+                recorder.finishRecording();
+                console.log('Recording stopped');
+            });
+  
+    
+        }).catch(function(err) {
+            console.log("catchato");
         });
-});
+    }); 
+}

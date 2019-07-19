@@ -1,5 +1,5 @@
 var purpose_array = ['what','how','why']
-var language_sigla = ['ita','eng','deu','fra','esp']
+var language_sigla = ['it','en','de','fr','es']
 var language_nome = ['italiano','inglese','tedesco','francese','spagnolo']
 var content_sigla = ['none','nat','art','his','flk','mod','rel','cui','spo','mus','mov','fas','shp','tec','pop','prs','oth']
 var content_nome =['nessuna','natura','arte','storia','folklore','cultura moderna','religione','cucina e drink','sport','musica','film','moda','shopping','tecnologia','cult. pop. e gossip','esperienze personali','altro']
