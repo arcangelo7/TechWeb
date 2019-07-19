@@ -81,7 +81,6 @@ app.get('/preferenze', accessoSicuro, (req, res)=>{
     collection.findOne({"_id": new mongodb.ObjectID(req.session.passport.user)}, function(err, result) {
         if(err) console.log("Errore: impossibile inserire clip all'interno del database");
         console.log("req.session.passport.user: " + req.session.passport.user);
-        console.log(result);
         res.render('preferenze', {
             nome: result.nome,
             cognome: result.cognome,
@@ -109,7 +108,6 @@ app.get('/browser-mappa', accessoSicuro, (req, res)=>{
     var collection = db.collection('utenti');
     collection.findOne({"_id": new mongodb.ObjectID(req.session.passport.user)}, function(err, result) {
         if(err) console.log("Errore: impossibile inserire clip all'interno del database");
-        console.log("req.session.passport.user: " + req.session.passport.user);
         res.render('mappaBrowser', {
             lingua: result.lingua,
             audience: result.audience

@@ -42,11 +42,14 @@
 <body>
     {{> _navigazione}}
 
-    <div class="container-fluid p-0">
-        {{> _avvisi}}
-        {{> _errori}}
-
-        {{{body}}}
+    <div class="container-fluid p-0" id="contenitore">
+        <div id="main">
+            {{> _avvisi}}
+            {{> _errori}}
+            {{{body}}}
+        </div>
     </div>
+
+    {{>_footer}}
 </body>
 </html>

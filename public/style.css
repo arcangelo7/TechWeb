@@ -1,3 +1,12 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
 img {
   position: absolute;
   bottom: 0;
@@ -6,6 +15,10 @@ img {
 /*To show a full-screen map*/
 #mappa {
   height: 88vh;
+}
+
+#mappaEditor {
+  height: calc(100vh - 9ex);
 }
 
 .info {
@@ -182,4 +195,21 @@ img {
   z-index: 2;
   position: relative;
 }
+
+#contenitore {
+  min-height: 100%;
+}
+
+#main {
+  overflow: auto;
+  padding-bottom: 12ex; /*Riempie lo spazio vuoto prima del footer*/
+}
+
+footer {
+  position: relative;
+  height: 12ex;
+  margin-top: -12ex; /*Compensa il padding aggiunto, sempre per levare spazi bianchi*/
+}
+
+
 

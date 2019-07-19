@@ -1,6 +1,6 @@
 
 // initialize the map to show the Europe
-var map = L.map('mappa').setView([41,12], 5);
+var map = L.map('mappaEditor').setView([41,12], 5);
 
 // Creo un box per mostrare messaggi all'utente
 var info = L.control();
