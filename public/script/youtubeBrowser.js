@@ -3,23 +3,31 @@ var audienceSelezionata;
 var dettaglioSelezionato;
 
 function filtra(){
-    $("#results").html("");
-    init();
+    if($("#noFiltri").prop("checked") == true) {
+        $(".custom-select").prop('disabled', true);
+        $("#results").html("");
+        $("#numeroRisultati").html("");
+        init();
+    } else {
+        $(".custom-select").prop('disabled', false);
+        $("#results").html("");
+        $("#numeroRisultati").html("");
+        init();
+    }
 }
 
-// function lenghtSelect(){
-//     vd = document.getElementById("approfondimento").value;
-//     $("#results").html("");
-//     init();
-// }
+
+$("noFiltri").change(function(){
+
+});
 
 function init() {
     rl = document.getElementById("lingua").value;
     audienceSelezionata = document.getElementById("audience").value;
     dettaglioSelezionato = document.getElementById("dettaglio").value;
-    // gapi.client.setApiKey("AIzaSyC5bzLvEG6GGvw8WrsdbETj5tUOe_8wyQQ");
+    gapi.client.setApiKey("AIzaSyC5bzLvEG6GGvw8WrsdbETj5tUOe_8wyQQ");
     // gapi.client.setApiKey("AIzaSyB06GGowaL0BF-ladpPabNIuO3ihMdiqX4");
-    gapi.client.setApiKey("AIzaSyC3vOztNiecvkLDdHCnP8W3nEafKFdohNQ");
+    // gapi.client.setApiKey("AIzaSyC3vOztNiecvkLDdHCnP8W3nEafKFdohNQ");
     gapi.client.load("youtube", "v3", function() {
         console.log("YouTube Api is ready");
         var request = gapi.client.youtube.search.list({
@@ -195,7 +203,6 @@ function init() {
                         `
                         <div id="${videoId}link" class="col-md-4 my-2">
                             <div class="card h-100">
-                                <img id="card-image" class="position-static card-img-top" src="${thumbUrlHight}" alt="Anteprima video YouTube">
                                 <div class="card-body">
                                     <h5 class="card-title">${title}</h5>
                                     <p class="card-text">${scopo}</p>
@@ -233,6 +240,11 @@ function init() {
                         </script>
                     `);
                 }
+                $("#numeroRisultati").append(
+                    `
+                    ${items.length} clip da ascoltare
+                    `
+                )
                 // FILTRI
                 var ids = [];
                 // Hide cards
@@ -243,7 +255,9 @@ function init() {
                     var audience = description.split(":")[4];
                     var dettaglio = description.split(":")[5];
                     dettaglio = dettaglio.split("%%%")[0];
-                    if(lingua != rl || audienceSelezionata != audience || dettaglioSelezionato != dettaglio){
+                    if($("#noFiltri").prop("checked") == true) {
+                        document.getElementById(id+"link").hidden = false;                
+                    } else if (rl != lingua || audienceSelezionata != audience || dettaglioSelezionato != dettaglio){
                         ids.push(id);
                         document.getElementById(id+"link").hidden = true;                
                     }

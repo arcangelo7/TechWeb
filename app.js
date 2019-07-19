@@ -351,8 +351,8 @@ app.post("/registrazione", (req, res)=>{
                 cognome: req.body.cognome,
                 email: req.body.email,
                 password: req.body.password,
-                lingua: 'italiano',
-                audience: 'pubblico generico'
+                lingua: 'it',
+                audience: 'gen'
             }
             collection.insertOne(nuovoUtente, (err, result)=>{
                 if(err) {

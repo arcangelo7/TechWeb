@@ -9,34 +9,69 @@
     <div id='instructions'></div>
 </div>
 
-<a href="#linguaDiv" id="toResults" title="Link ai risultati">
-    <section id="scroll" class="demo">
+<section id="scroll">
+    <a href="#titolo" id="toResults" title="Link ai risultati">
         <span></span>
-    </section>
-</a>
+    </a>
+</section>
+
+<div class="text-center m-5" id="titolo">
+    <h1>Visitare Praga</h1>
+    <p class="lead" id="numeroRisultati"></p>
+</div>
 
 <input id="coordinate" type="hidden" value="">
 <input id="videoId" type="hidden" value="">
 
-<div id="linguaDiv" style="display: inline-block;"></div>
+<div class="row m-5">
+    <div class="input-group input-group-sm mb-3 col-sm-5 offset-sm-3 col-lg-2 offset-lg-5">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <input id="noFiltri" type="checkbox" onchange="filtra()">
+            </div>
+        </div>
+        <input type="text" class="form-control" value="Disattiva filtri">
+    </div>
+</div>
+<div class="row m-5">
+    <div class="input-group mb-3 col-sm-12 col-lg-4">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="lingua">Lingua</label>
+        </div>
+        <select name="lingua" id="lingua" class="custom-select" onchange="filtra()">
+            <option id="it" value="it">italiano</option>
+            <option id="en" value="en">inglese</option>
+            <option id="de" value="de">tedesco</option>
+            <option id="fr" value="fr">francese</option>
+            <option id="es" value="es">spagnolo</option>
+        </select> 
+    </div>
 
-<select name="audience" id="audience" onchange="filtra()">
-    <option id="gen" value="gen">pubblico generico</option>
-    <option id="pre" value="pre">pre-scuola</option>
-    <option id="elm" value="elm">scuola primaria</option>
-    <option id="mid" value="mid">scuola media</option>
-    <option id="scl" value="scl">specialisti del settore</option>
-</select> 
+    <div class="input-group mb-3 col-sm-12 col-lg-4">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="audience">Audience</label>
+        </div>
+        <select name="audience" id="audience"t class="custom-select" onchange="filtra()">
+            <option id="gen" value="gen">pubblico generico</option>
+            <option id="pre" value="pre">pre-scuola</option>
+            <option id="elm" value="elm">scuola primaria</option>
+            <option id="mid" value="mid">scuola media</option>
+            <option id="scl" value="scl">specialisti del settore</option>
+        </select> 
+    </div>
 
-<script>
-    document.getElementById("{{audience}}").selected = true;
-</script>
+    <div class="input-group mb-3 col-sm-12 col-lg-4">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="dettaglio">Dettaglio</label>
+        </div>
+        <select name="dettaglio" id="dettaglio"t class="custom-select" onchange="filtra()">
+            <option id="1" value="1" selected>leggero</option>
+            <option id="2" value="2">medio</option>
+            <option id="3" value="3">approfondito</option>
+        </select> 
+    </div>
+</div>
 
-<select name="dettaglio" id="dettaglio" onchange="filtra()">
-    <option id="1" value="1">leggero</option>
-    <option id="2" value="2">medio</option>
-    <option id="3" value="3">approfondito</option>
-</select> 
 
 <div class="m-5">
     <div class="row" id="results">
@@ -57,28 +92,7 @@
             playerVars: {'origin':'https://site181909.tw.cs.unibo.it'}
         });
     }
+    document.getElementById("{{lingua}}").selected = true;
+    document.getElementById("{{audience}}").selected = true;
 
-    var linguaDiv = document.getElementById("linguaDiv");
-    //creazione dell'array con i valori da aggiungere
-    var arrayLinguaEstesa = ['italiano','inglese','tedesco','francese','spagnolo'];
-    var arrayLinguaAbbreviata = ['it','en','de','fr','es'];
-
-    //creazione della lista dei valori
-    var linguaSelected = document.createElement("select");
-    linguaSelected.id = "lingua";
-    linguaSelected.name = "lingua";
-    linguaSelected.addEventListener("change", filtra);
-    linguaDiv.appendChild(linguaSelected);
-
-    //crezione e aggiunta delle opzioni
-    for (var i = 0; i < arrayLinguaEstesa.length; i++) {
-        var option = document.createElement("option");
-        option.value = arrayLinguaAbbreviata[i];
-        option.text = arrayLinguaEstesa[i];
-        if(arrayLinguaEstesa[i]=="{{ lingua }}")
-        {
-          option.selected = true;
-        }
-        linguaSelected.appendChild(option);
-    }
 </script>
