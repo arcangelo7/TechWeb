@@ -34,7 +34,7 @@ function init() {
             part: "snippet",
             type: "video",
             channelId: "UC5mREzTEPh9h1vUhPq1FKhQ",
-            maxResults: 10,
+            maxResults: 50,
             order: "title"
         }); 
         // execute the request
@@ -78,7 +78,7 @@ function init() {
                         case "how":
                             scopo = "Come ci arrivo?";
                             break;
-                        case "why?":
+                        case "why":
                             scopo = "Perché ne vale la pena?";
                             break;
                     }

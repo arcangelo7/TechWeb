@@ -53,7 +53,7 @@
   // '807601852112-7omdcouallpk4115i6fueefg4mvnlgll.apps.googleusercontent.com';
   // '728495399298-7pn0ppv0ujalaq4j07ehnoel0dnlense.apps.googleusercontent.com';
   // '464791775721-qu6cj90prgb60csokgvtvt8vtg22n2g4.apps.googleusercontent.com';
-  '79709889386-nradu376m4f9inc267macf8caobl86kb.apps.googleusercontent.com';
+   '79709889386-nradu376m4f9inc267macf8caobl86kb.apps.googleusercontent.com';
 
   const DISCOVERY_DOCS = [
     'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'
@@ -139,7 +139,7 @@
               .then(blob =>{
                 uploadVideo(blob, metadata, function(data) {
                     alert("Grazie per il tuo contributo!");
-                    // location.reload();
+                    window.location("/lista-clip");
                 })
               });
         }

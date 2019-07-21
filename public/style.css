@@ -120,7 +120,7 @@ img {
 
 #scroll {
     background-color: #343B40;
-    height: 6vh;
+    height: 56px;
     position: -webkit-sticky;
     position: sticky;
     bottom: 0px;

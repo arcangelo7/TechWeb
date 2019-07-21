@@ -1,6 +1,28 @@
 
 // initialize the map to show the Europe
 var map = L.map('mappaEditor').setView([41,12], 5);
+var circle = new L.circle;
+var marker = new L.Marker;
+var popup = new L.popup;
+
+var popupContent = `<div class='text-center'>
+<h3>Tu sei qui <i id='microfono' class='fas fa-microphone'></i></h3>
+<p id='popupText' class='lead'>Clicca per creare una clip</p>
+<button id='registratore' class='btn btn-primary'>Crea</button>
+<button id='stop' class='btn btn-primary' hidden>Stop</button>
+</div>`
+
+// Il popup non si chiude mai
+var popupOptions = {
+closeButton: false,
+closeOnEscapeKey: false,
+closeOnClick: false
+}
+// Testo alternativo per l'accessibilità e possibilità di aggiustare la posizione del marker
+var markerOptions = {
+alt: "Marker posizionato sulla tua posizione",
+draggable: true
+}
 
 // Creo un box per mostrare messaggi all'utente
 var info = L.control();
@@ -33,24 +55,7 @@ function onLocationFound(e) {
             map.removeLayer(layer);
         }
     }); 
-    var popupContent = `<div class='text-center'>
-                                <h3>Tu sei qui <i id='microfono' class='fas fa-microphone'></i></h3>
-                                <p id='popupText' class='lead'>Clicca per creare una clip</p>
-                                <button id='registratore' class='btn btn-primary'>Crea</button>
-                                <button id='stop' class='btn btn-primary' hidden>Stop</button>
-                        </div>`
 
-    // Il popup non si chiude mai
-    var popupOptions = {
-        closeButton: false,
-        closeOnEscapeKey: false,
-        closeOnClick: false
-    }
-    // Testo alternativo per l'accessibilità e possibilità di aggiustare la posizione del marker
-    var markerOptions = {
-        alt: "Marker posizionato sulla tua posizione",
-        draggable: true
-    }
     // Aggiungo un marker con un popup
     var marker = new L.Marker(e.latlng, markerOptions);
     popup = new L.popup()
@@ -66,6 +71,7 @@ function onLocationFound(e) {
         circle.setLatLng(position);
         marker.setLatLng(position).openPopup();
         document.getElementById('olc').value = OpenLocationCode.encode(position.lat, position.lng);
+        console.log(document.getElementById('olc').value);
     });   
     // center the map on the right coordinates and zoom
     map.setView(e.latlng, 18);
@@ -105,6 +111,33 @@ function manipolaPopupRegistrazione(){
   }); 
   audioCapture();  
 }
+
+// Search box
+// var geocoder = L.Control.geocoder({
+//     defaultMarkGeocode: false,
+//     collapsed: false,
+//     placeholder: "Cerca...",
+//     errorMessage: "Non ho trovato nulla... Riprova"
+// })
+//   .on('markgeocode', function(e) {
+//     map.eachLayer(function(layer) {
+//         // Remove all layers except the background (tilelayer). Evita che a ogni aggiornamento di posizione rimangano i vecchi marker e circle
+//         if (!(layer instanceof L.TileLayer)) {
+//             map.removeLayer(layer);
+//         }
+//     }); 
+//     marker = new L.Marker(e.geocode.center, markerOptions);
+//     popup = new L.popup()
+//         .setLatLng(e.geocode.center)
+//         .setContent(popupContent);
+//     marker.addTo(map).bindPopup(popup, popupOptions).openPopup();
+//     circle = L.circle(e.geocode.center, 100).addTo(map);
+//     map.setView(e.geocode.center, 18); 
+
+//     document.getElementById('olc').value = OpenLocationCode.encode(e.geocode.center.lat, e.geocode.center.lng);
+//     console.log(document.getElementById('olc').value);
+//   })
+//   .addTo(map);
 
 // Comportamento dell'interfaccia per registrare
 map.on('popupopen', manipolaPopupRegistrazione);
