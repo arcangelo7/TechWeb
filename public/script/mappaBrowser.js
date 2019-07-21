@@ -36,7 +36,6 @@ var markerOptions = {
 function newPosition() {
     coordinate = marker.getLatLng();
     document.getElementById('coordinate').value = coordinate.lat + "," + coordinate.lng;    
-    $("#results").html("");
 }
 
 function onLocationFound(e) {
@@ -87,6 +86,7 @@ var geocoder = L.Control.geocoder({
     circle = L.circle(e.geocode.center, 100).addTo(map);
     map.setView(e.geocode.center, 18); 
     newPosition();
+    $("#results").html("");
     init();
   })
   .addTo(map);

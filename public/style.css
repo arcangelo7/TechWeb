@@ -201,7 +201,6 @@ img {
 }
 
 #main {
-  overflow: auto;
   padding-bottom: 12ex; /*Riempie lo spazio vuoto prima del footer*/
 }
 

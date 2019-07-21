@@ -1,25 +1,41 @@
 <div class="container">
   <h2 class="my-4">Preferenze utente: {{ nome }} {{ cognome }} ({{ email }})</h2>
   <form id="preferenze" action="/preferenze" method="POST">
-    <select name="lingua" id="lingua">
-      <option id="it" value="it">italiano</option>
-      <option id="en" value="en">inglese</option>
-      <option id="de" value="de">tedesco</option>
-      <option id="fr" value="fr">francese</option>
-      <option id="es" value="es">spagnolo</option>
-    </select>
-    <br><br>
-    <select name="audience" id="audience">
-      <option id="gen" value="gen">pubblico generico</option>
-      <option id="pre" value="pre">pre-scuola</option>
-      <option id="elm" value="elm">scuola primaria</option>
-      <option id="mid" value="mid">scuola media</option>
-      <option id="scl" value="scl">specialisti del settore</option>
-    </select>
-    <br><br>
-    <button type="submit" class="btn btn-success">Aggiorna</button>
+
+    <div class="row">
+      <div class="input-group m-3 col-11 col-md-6">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="lingua">Lingua</label>
+        </div>
+        <select name="lingua" id="lingua" class="custom-select">
+          <option id="it" value="it">italiano</option>
+          <option id="en" value="en">inglese</option>
+          <option id="de" value="de">tedesco</option>
+          <option id="fr" value="fr">francese</option>
+          <option id="es" value="es">spagnolo</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-group m-3 col-11 col-md-6">
+        <select name="audience" id="audience" class="custom-select">
+          <option id="gen" value="gen">pubblico generico</option>
+          <option id="pre" value="pre">pre-scuola</option>
+          <option id="elm" value="elm">scuola primaria</option>
+          <option id="mid" value="mid">scuola media</option>
+          <option id="scl" value="scl">specialisti del settore</option>
+        </select>
+        <div class="input-group-append">
+          <label class="input-group-text" for="audience">Audience</label>
+        </div>
+      </div>
+    </div>
+
+      <button type="submit" class="btn btn-success col-11 col-sm-12 m-3 col-md-2">Aggiorna</button>
   </form>
 </div>
+
 <script>
   document.getElementById("{{lingua}}").selected = true;
   document.getElementById("{{audience}}").selected = true;
