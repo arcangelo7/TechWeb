@@ -33,7 +33,8 @@ function init() {
         var request = gapi.client.youtube.search.list({
             part: "snippet",
             type: "video",
-            channelId: "UC5mREzTEPh9h1vUhPq1FKhQ",
+            q: "8FPHFC5J+7W",
+            // channelId: "UC5mREzTEPh9h1vUhPq1FKhQ",
             maxResults: 50,
             order: "title"
         }); 
